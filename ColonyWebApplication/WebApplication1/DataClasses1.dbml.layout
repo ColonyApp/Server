@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11.125, 17.625" name="DataClasses1">
+  <DataContextMoniker Name="/DataClasses1DataContext" />
+  <nestedChildShapes>
+    <classShape Id="0268f09f-b7f3-45f3-a7de-25f7a8e47cdf" absoluteBounds="1.25, 1.625, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/DataClasses1DataContext/UserTable" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b92f47e7-39e1-4266-ba5e-59ea590412cf" absoluteBounds="1.2650000000000001, 2.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f08da776-5edb-479e-814f-ef0b628e9b9b" absoluteBounds="8.875, 4.375, 2, 2.5401025390625005">
+      <DataClassMoniker Name="/DataClasses1DataContext/GroupTable" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a21c8aa6-d8d0-4fd5-b46e-542390ea249e" absoluteBounds="8.89, 4.835, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="74a596f4-2460-4bfc-903a-3b506e230891" absoluteBounds="4.75, 5.375, 2, 11.962872721354167">
+      <DataClassMoniker Name="/DataClasses1DataContext/UserGroupTable" />
+      <nestedChildShapes>
+        <elementListCompartment Id="467e65f5-2c9e-45b4-94f2-1b724726d264" absoluteBounds="4.765, 5.835, 1.9700000000000002, 11.402872721354166" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.25 : 4.35740397135417); (2.25 : 11.3564363606771); (4.75 : 11.3564363606771)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClasses1DataContext/UserTable/UserTable_UserGroupTable" />
+      <nodes>
+        <classShapeMoniker Id="0268f09f-b7f3-45f3-a7de-25f7a8e47cdf" />
+        <classShapeMoniker Id="74a596f4-2460-4bfc-903a-3b506e230891" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6.75 : 6.14505126953125); (8.875 : 6.14505126953125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClasses1DataContext/UserGroupTable/UserGroupTable_GroupTable" />
+      <nodes>
+        <classShapeMoniker Id="74a596f4-2460-4bfc-903a-3b506e230891" />
+        <classShapeMoniker Id="f08da776-5edb-479e-814f-ef0b628e9b9b" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
