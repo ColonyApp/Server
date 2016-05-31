@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://colonywebappdb.azurewebsites.net/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://colonywebappdb.azurewebsites.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://colonywebappdb.azurewebsites.net/">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUserId">
+        <s:complexType />
+      </s:element>
+      <s:element name="CreateUserIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateUserIdResult" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateGroupId">
+        <s:complexType />
+      </s:element>
+      <s:element name="CreateGroupIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateGroupIdResult" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nickName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mailAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="groupName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateUserResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nickName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsExistsUserResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="groupName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsExistsGroupResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsUserGroupChain">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="userId" type="s1:guid" />
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsExistsUserGroupChainResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsExistsUserGroupChainResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModifyNickName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="userId" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="oldNickname" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newNickname" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModifyNickNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ModifyNickNameResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="guid">
+        <s:restriction base="s:string">
+          <s:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserIdSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateUserId" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserIdSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateUserIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupIdSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateGroupId" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupIdSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateGroupIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateUser" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsUserSoapIn">
+    <wsdl:part name="parameters" element="tns:IsExistsUser" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsUserSoapOut">
+    <wsdl:part name="parameters" element="tns:IsExistsUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:IsExistsGroup" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:IsExistsGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsUserGroupChainSoapIn">
+    <wsdl:part name="parameters" element="tns:IsExistsUserGroupChain" />
+  </wsdl:message>
+  <wsdl:message name="IsExistsUserGroupChainSoapOut">
+    <wsdl:part name="parameters" element="tns:IsExistsUserGroupChainResponse" />
+  </wsdl:message>
+  <wsdl:message name="ModifyNickNameSoapIn">
+    <wsdl:part name="parameters" element="tns:ModifyNickName" />
+  </wsdl:message>
+  <wsdl:message name="ModifyNickNameSoapOut">
+    <wsdl:part name="parameters" element="tns:ModifyNickNameResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebService1Soap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserId">
+      <wsdl:input message="tns:CreateUserIdSoapIn" />
+      <wsdl:output message="tns:CreateUserIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroupId">
+      <wsdl:input message="tns:CreateGroupIdSoapIn" />
+      <wsdl:output message="tns:CreateGroupIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <wsdl:input message="tns:CreateUserSoapIn" />
+      <wsdl:output message="tns:CreateUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUser">
+      <wsdl:input message="tns:IsExistsUserSoapIn" />
+      <wsdl:output message="tns:IsExistsUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsGroup">
+      <wsdl:input message="tns:IsExistsGroupSoapIn" />
+      <wsdl:output message="tns:IsExistsGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUserGroupChain">
+      <wsdl:input message="tns:IsExistsUserGroupChainSoapIn" />
+      <wsdl:output message="tns:IsExistsUserGroupChainSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModifyNickName">
+      <wsdl:input message="tns:ModifyNickNameSoapIn" />
+      <wsdl:output message="tns:ModifyNickNameSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebService1Soap" type="tns:WebService1Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserId">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateUserId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroupId">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateGroupId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUser">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsGroup">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUserGroupChain">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsUserGroupChain" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyNickName">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/ModifyNickName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebService1Soap12" type="tns:WebService1Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserId">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateUserId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroupId">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateGroupId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/CreateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUser">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsGroup">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsExistsUserGroupChain">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/IsExistsUserGroupChain" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyNickName">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/ModifyNickName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebService1">
+    <wsdl:port name="WebService1Soap" binding="tns:WebService1Soap">
+      <soap:address location="http://colonywebappdb.azurewebsites.net/WebService1.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebService1Soap12" binding="tns:WebService1Soap12">
+      <soap12:address location="http://colonywebappdb.azurewebsites.net/WebService1.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
