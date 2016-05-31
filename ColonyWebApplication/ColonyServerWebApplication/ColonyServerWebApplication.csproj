@@ -214,7 +214,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\PublishProfiles\ColonyServerWebApplication.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyServerWebApplication - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyServerWebApplication - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="GetTop.aspx" />
     <Content Include="GiveTop.aspx" />
@@ -506,7 +507,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59456</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

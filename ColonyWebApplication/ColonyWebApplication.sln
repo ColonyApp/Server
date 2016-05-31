@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{992D3A4A-5374-41CF-A4CE-3CD3DEC307FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColonyServerWebApplication", "ColonyServerWebApplication\ColonyServerWebApplication.csproj", "{F35BB250-6D79-4B85-807A-A7672F2B804D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{992D3A4A-5374-41CF-A4CE-3CD3DEC307FE} = {992D3A4A-5374-41CF-A4CE-3CD3DEC307FE}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{AB062D70-4ECF-4BEA-9523-39D11BEB7534}"
 EndProject

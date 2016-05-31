@@ -107,8 +107,8 @@
       <LastGenOutput>DataClasses1.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Properties\PublishProfiles\ColonyWebAppDB %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\ColonyWebAppDB.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyWebAppDB - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyWebAppDB - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -156,7 +156,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49543</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
