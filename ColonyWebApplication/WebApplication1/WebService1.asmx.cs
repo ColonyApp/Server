@@ -4,9 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Transactions;
+using System.Web.Script.Serialization;
 
 namespace WebApplication1
 {
+    public class test
+    {
+        public string name { get; set; }
+    }
     /// <summary>
     /// Summary description for WebService1
     /// </summary>
@@ -19,10 +24,16 @@ namespace WebApplication1
     {
 
         [WebMethod]
-        public string HelloWorld()
+        //[ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void HelloWorld()
         {
-            return "Atsushi KAWAMORITA!";
+            test[] test = new test[]{ new test() { name = "Atsushi1"}, new test() { name = "Atsushi2"} };
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/json";
+            Context.Response.Write(js.Serialize(test));
         }
+
         [WebMethod]
         public Guid CreateUserId()
         {
@@ -33,18 +44,31 @@ namespace WebApplication1
         {
             return Guid.NewGuid();
         }
+        private bool CanInput(string targetData, int targetDataStingLenght)
+        {
+            if (string.IsNullOrEmpty(targetData))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(targetData))
+            {
+                return false;
+            }
+            if(targetData.Length >= targetDataStingLenght)
+            {
+                return false;
+            }
+            return true;
+        }
         [WebMethod]
         public bool CreateUser(string nickName, string mailAddress, string groupName)
         {
             try
             {
                 /* 入力値チェック */
-                if (string.IsNullOrEmpty(nickName)) { return false; }
-                if (string.IsNullOrWhiteSpace(nickName)) { return false; }
-                if (string.IsNullOrEmpty(mailAddress)) { return false; }
-                if (string.IsNullOrWhiteSpace(mailAddress)) { return false; }
-                if (string.IsNullOrEmpty(groupName)) { return false; }
-                if (string.IsNullOrWhiteSpace(groupName)) { return false; }
+                if(!CanInput(nickName, 301)) { return false; }
+                if(!CanInput(mailAddress, 301)) { return false; }
+                if(!CanInput(groupName, 351)) { return false; }
 
                 /* ユーザー作成時必須項目値生成 */
                 var userId = Guid.NewGuid();
@@ -102,6 +126,10 @@ namespace WebApplication1
         {
             try
             {
+                /* 入力値チェック */
+                if (!CanInput(nickName, 301)) { return false; }
+                if (!CanInput(mailAddress, 301)) { return false; }
+
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
                     IsolationLevel = IsolationLevel.ReadCommitted,
@@ -134,6 +162,9 @@ namespace WebApplication1
         {
             try
             {
+                /* 入力値チェック */
+                if (!CanInput(groupName, 351)) { return false; }
+
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
                     IsolationLevel = IsolationLevel.ReadCommitted,
@@ -167,6 +198,10 @@ namespace WebApplication1
         {
             try
             {
+                /* 入力値チェック */
+                if (!CanInput(nickname, 301)) { return false; }
+                if (!CanInput(groupName01, 351)) { return false; }
+
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
                     IsolationLevel = IsolationLevel.ReadCommitted,
@@ -339,6 +374,10 @@ namespace WebApplication1
         {
             try
             {
+                /* 入力値チェック */
+                if (!CanInput(oldNickname, 301)) { return false; }
+                if (!CanInput(newNickname, 301)) { return false; }
+
                 /* ユーザー修正 */
                 using (TransactionScope t = new TransactionScope())
                 {
