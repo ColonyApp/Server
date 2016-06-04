@@ -31,20 +31,21 @@ namespace WebApplication1
             test[] test = new test[]{ new test() { name = "Atsushi1"}, new test() { name = "Atsushi2"} };
             JavaScriptSerializer js = new JavaScriptSerializer();
             return js.Serialize(test);
-            //Context.Response.Clear();
-            //Context.Response.ContentType = "application/json";
-            //Context.Response.Write(js.Serialize(test));
         }
 
         [WebMethod]
-        public Guid CreateUserId()
+        public String CreateUserId()
         {
-            return Guid.NewGuid();
+            Guid returnValue = Guid.NewGuid();
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            return js.Serialize(returnValue);
         }
         [WebMethod]
-        public Guid CreateGroupId()
+        public String CreateGroupId()
         {
-            return Guid.NewGuid();
+            Guid returnValue = Guid.NewGuid();
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            return js.Serialize(returnValue);
         }
         private bool CanInput(string targetData, int targetDataStingLenght)
         {

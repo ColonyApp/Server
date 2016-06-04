@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 		PublishScripts\Templates\ColonyServerWebApplication.param.dev.json = PublishScripts\Templates\ColonyServerWebApplication.param.dev.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{BE16E50E-CEBD-448F-A89A-07AB366B57D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{F35BB250-6D79-4B85-807A-A7672F2B804D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F35BB250-6D79-4B85-807A-A7672F2B804D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F35BB250-6D79-4B85-807A-A7672F2B804D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE16E50E-CEBD-448F-A89A-07AB366B57D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE16E50E-CEBD-448F-A89A-07AB366B57D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE16E50E-CEBD-448F-A89A-07AB366B57D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE16E50E-CEBD-448F-A89A-07AB366B57D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
