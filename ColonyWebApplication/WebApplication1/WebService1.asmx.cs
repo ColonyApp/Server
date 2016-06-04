@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Transactions;
 using System.Web.Script.Serialization;
+using System.Web.Script.Services;
 
 namespace WebApplication1
 {
@@ -24,14 +25,15 @@ namespace WebApplication1
     {
 
         [WebMethod]
-        //[ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void HelloWorld()
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public string HelloWorld()
         {
             test[] test = new test[]{ new test() { name = "Atsushi1"}, new test() { name = "Atsushi2"} };
             JavaScriptSerializer js = new JavaScriptSerializer();
-            Context.Response.Clear();
-            Context.Response.ContentType = "application/json";
-            Context.Response.Write(js.Serialize(test));
+            return js.Serialize(test);
+            //Context.Response.Clear();
+            //Context.Response.ContentType = "application/json";
+            //Context.Response.Write(js.Serialize(test));
         }
 
         [WebMethod]
