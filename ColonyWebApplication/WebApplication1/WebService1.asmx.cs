@@ -143,6 +143,7 @@ namespace WebApplication1
                         var query = from ut in c.UserTables
                                     where ut.Nickname == nickName
                                     where ut.MailAddress == mailAddress
+                                    where ut.IsLogicalDelete == false
                                     select ut.Id;
                         if (query.Count() == 1)
                         {
@@ -178,6 +179,7 @@ namespace WebApplication1
                     {
                         var query = from g in c.GroupTables
                                     where g.GroupName == groupName
+                                    where g.IsLogicalDelete == false
                                     select g.GroupId;
                         if (query.Count() == 1)
                         {
@@ -218,6 +220,9 @@ namespace WebApplication1
                                     join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
                                     where u.Nickname == nickname
                                     where g01.GroupName == groupName01
+                                    where u.IsLogicalDelete == false
+                                    where ug.IsLogicalDelete == false
+                                    where g01.IsLogicalDelete == false
                                     select u.Id;
                         if (query.Count() == 1)
                         {
@@ -254,6 +259,9 @@ namespace WebApplication1
                                     join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
                                     where u.Id == userId
                                     where g01.GroupId == groupId
+                                    where u.IsLogicalDelete == false
+                                    where ug.IsLogicalDelete == false
+                                    where g01.IsLogicalDelete == false
                                     select u.Id;
                         if (query.Count() == 1)
                         {
@@ -289,6 +297,7 @@ namespace WebApplication1
                         var query = from ut in c.UserTables
                                     where ut.Nickname == oldNickname
                                     where ut.Id == userId
+                                    where ut.IsLogicalDelete == false
                                     select ut;
 
                         if (query.Count() != 1) { return false; }
@@ -325,6 +334,7 @@ namespace WebApplication1
                     {
                         var userTables = from u in c.UserTables
                                     where u.MailAddress == mailAddress
+                                    where u.IsLogicalDelete == false
                                     select u;
                         if (userTables.Count() != 1) { return String.Empty; }
                         foreach(UserTable userTable in userTables)
@@ -359,6 +369,7 @@ namespace WebApplication1
                     {
                         var userTables = from u in c.UserTables
                                          where u.Nickname == nickName
+                                         where u.IsLogicalDelete == false
                                          select u;
                         if (userTables.Count() != 1) { return String.Empty; }
                         foreach (UserTable userTable in userTables)
