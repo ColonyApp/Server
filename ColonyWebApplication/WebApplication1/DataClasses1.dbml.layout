@@ -20,7 +20,7 @@
         <elementListCompartment Id="467e65f5-2c9e-45b4-94f2-1b724726d264" absoluteBounds="4.015, 2.085, 1.9700000000000002, 11.402872721354166" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.25 : 1.85); (4 : 1.85)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.25 : 1.85); (4 : 1.85)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClasses1DataContext/UserTable/UserTable_UserGroupTable" />
       <nodes>
         <classShapeMoniker Id="0268f09f-b7f3-45f3-a7de-25f7a8e47cdf" />
@@ -46,7 +46,7 @@
         <elementListCompartment Id="01667f2d-de25-4eed-a20e-9a4337942e47" absoluteBounds="4.14, 3.335, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.125 : 3.0375); (3.5 : 3.0375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.125 : 3.0375); (3.5 : 3.0375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClasses1DataContext/RelationsipTable/RelationsipTable_TargetDataTable" />
       <nodes>
         <classShapeMoniker Id="ab606d28-4b95-445a-8ef8-b2c97fdfca22" />
