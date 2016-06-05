@@ -16,6 +16,9 @@ namespace ConsoleApplication1
             //string data = s.HelloWorld();
             string data = JsonConvert.DeserializeObject(s.HelloWorld()).ToString();
             Console.WriteLine(data);
+            string userId = s.CreateUserId().Replace("\"", "");
+            data = JsonConvert.DeserializeObject(userId).ToString();
+            Console.WriteLine(data);
         }
     }
 }

@@ -36,16 +36,16 @@ namespace WebApplication1
         [WebMethod]
         public String CreateUserId()
         {
-            Guid returnValue = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize(returnValue);
+            return js.Serialize(userId);
         }
         [WebMethod]
         public String CreateGroupId()
         {
-            Guid returnValue = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize(returnValue);
+            return js.Serialize(groupId);
         }
         private bool CanInput(string targetData, int targetDataStingLenght)
         {
@@ -308,25 +308,89 @@ namespace WebApplication1
             }
             return false;
         }
+        //* ・メアドからUserIDを取得
+        [WebMethod]
+        public String GetUserIdByMailAddress(String mailAddress)
+        {
+            try
+            {
+                string returnValue = string.Empty;
+                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TransactionManager.DefaultTimeout,
+                }))
+                {
+                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    {
+                        var userTables = from u in c.UserTables
+                                    where u.MailAddress == mailAddress
+                                    select u;
+                        if (userTables.Count() != 1) { return String.Empty; }
+                        foreach(UserTable userTable in userTables)
+                        {
+                            returnValue = userTable.Id.ToString();
+                        }
+                    }
+                }
+                return returnValue;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return String.Empty;
+            }
 
-        
-         //* ・メアドからUserIDを取得
-         //* ・ニックネームからUserIdを取得
-         //* ・グループ名からGroupIDを取得
-         //* ・UserIDとGroupIDからそれらの関係性が正しいか判断
-         //* ・TargetIDを取得（GUID）
-         //* ・Want情報作成
-         //* ・Want情報変更
-         //* ・Want情報削除
-         //* ・Want情報検索
-         //* ・Get情報作成
-         //* ・Get情報更新
-         //* ・Get情報削除
-         //* ・Get情報検索
-         //* ・Give情報作成
-         //* ・Give情報更新
-         //* ・Give情報削除
-         //* ・Give情報検索
+        }
+        //* ・ニックネームからUserIdを取得
+        [WebMethod]
+        public String GetUserIdByNickName(String nickName)
+        {
+            try
+            {
+                string returnValue = string.Empty;
+                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    Timeout = TransactionManager.DefaultTimeout,
+                }))
+                {
+                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    {
+                        var userTables = from u in c.UserTables
+                                         where u.Nickname == nickName
+                                         select u;
+                        if (userTables.Count() != 1) { return String.Empty; }
+                        foreach (UserTable userTable in userTables)
+                        {
+                            returnValue = userTable.Id.ToString();
+                        }
+                    }
+                }
+                return returnValue;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return String.Empty;
+            }
+
+        }
+        //* ・グループ名からGroupIDを取得
+        //* ・UserIDとGroupIDからそれらの関係性が正しいか判断
+        //* ・TargetIDを取得（GUID）
+        //* ・Want情報作成
+        //* ・Want情報変更
+        //* ・Want情報削除
+        //* ・Want情報検索
+        //* ・Get情報作成
+        //* ・Get情報更新
+        //* ・Get情報削除
+        //* ・Get情報検索
+        //* ・Give情報作成
+        //* ・Give情報更新
+        //* ・Give情報削除
+        //* ・Give情報検索
 
     }
 }

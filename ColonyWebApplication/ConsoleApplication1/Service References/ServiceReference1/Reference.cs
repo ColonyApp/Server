@@ -22,17 +22,19 @@ namespace ConsoleApplication1.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/HelloWorld", ReplyAction="*")]
         System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.HelloWorldResponse> HelloWorldAsync(ConsoleApplication1.ServiceReference1.HelloWorldRequest request);
         
+        // CODEGEN: 名前空間 http://colonywebappdb.azurewebsites.net/ の要素名 CreateUserIdResult が nillable に設定されていないため、メッセージ コントラクトを生成しています
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateUserId", ReplyAction="*")]
-        System.Guid CreateUserId();
+        ConsoleApplication1.ServiceReference1.CreateUserIdResponse CreateUserId(ConsoleApplication1.ServiceReference1.CreateUserIdRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateUserId", ReplyAction="*")]
-        System.Threading.Tasks.Task<System.Guid> CreateUserIdAsync();
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateUserIdResponse> CreateUserIdAsync(ConsoleApplication1.ServiceReference1.CreateUserIdRequest request);
+        
+        // CODEGEN: 名前空間 http://colonywebappdb.azurewebsites.net/ の要素名 CreateGroupIdResult が nillable に設定されていないため、メッセージ コントラクトを生成しています
+        [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateGroupId", ReplyAction="*")]
+        ConsoleApplication1.ServiceReference1.CreateGroupIdResponse CreateGroupId(ConsoleApplication1.ServiceReference1.CreateGroupIdRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateGroupId", ReplyAction="*")]
-        System.Guid CreateGroupId();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateGroupId", ReplyAction="*")]
-        System.Threading.Tasks.Task<System.Guid> CreateGroupIdAsync();
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateGroupIdResponse> CreateGroupIdAsync(ConsoleApplication1.ServiceReference1.CreateGroupIdRequest request);
         
         // CODEGEN: 名前空間 http://colonywebappdb.azurewebsites.net/ の要素名 nickName が nillable に設定されていないため、メッセージ コントラクトを生成しています
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/CreateUser", ReplyAction="*")]
@@ -74,6 +76,13 @@ namespace ConsoleApplication1.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/ModifyNickName", ReplyAction="*")]
         System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.ModifyNickNameResponse> ModifyNickNameAsync(ConsoleApplication1.ServiceReference1.ModifyNickNameRequest request);
+        
+        // CODEGEN: 名前空間 http://colonywebappdb.azurewebsites.net/ の要素名 mailAddress が nillable に設定されていないため、メッセージ コントラクトを生成しています
+        [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/GetUserIdByMailAddress", ReplyAction="*")]
+        ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse GetUserIdByMailAddress(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://colonywebappdb.azurewebsites.net/GetUserIdByMailAddress", ReplyAction="*")]
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse> GetUserIdByMailAddressAsync(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -134,6 +143,128 @@ namespace ConsoleApplication1.ServiceReference1 {
         
         public HelloWorldResponseBody(string HelloWorldResult) {
             this.HelloWorldResult = HelloWorldResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CreateUserIdRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CreateUserId", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.CreateUserIdRequestBody Body;
+        
+        public CreateUserIdRequest() {
+        }
+        
+        public CreateUserIdRequest(ConsoleApplication1.ServiceReference1.CreateUserIdRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute()]
+    public partial class CreateUserIdRequestBody {
+        
+        public CreateUserIdRequestBody() {
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CreateUserIdResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CreateUserIdResponse", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.CreateUserIdResponseBody Body;
+        
+        public CreateUserIdResponse() {
+        }
+        
+        public CreateUserIdResponse(ConsoleApplication1.ServiceReference1.CreateUserIdResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://colonywebappdb.azurewebsites.net/")]
+    public partial class CreateUserIdResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string CreateUserIdResult;
+        
+        public CreateUserIdResponseBody() {
+        }
+        
+        public CreateUserIdResponseBody(string CreateUserIdResult) {
+            this.CreateUserIdResult = CreateUserIdResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CreateGroupIdRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CreateGroupId", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.CreateGroupIdRequestBody Body;
+        
+        public CreateGroupIdRequest() {
+        }
+        
+        public CreateGroupIdRequest(ConsoleApplication1.ServiceReference1.CreateGroupIdRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute()]
+    public partial class CreateGroupIdRequestBody {
+        
+        public CreateGroupIdRequestBody() {
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CreateGroupIdResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CreateGroupIdResponse", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.CreateGroupIdResponseBody Body;
+        
+        public CreateGroupIdResponse() {
+        }
+        
+        public CreateGroupIdResponse(ConsoleApplication1.ServiceReference1.CreateGroupIdResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://colonywebappdb.azurewebsites.net/")]
+    public partial class CreateGroupIdResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string CreateGroupIdResult;
+        
+        public CreateGroupIdResponseBody() {
+        }
+        
+        public CreateGroupIdResponseBody(string CreateGroupIdResult) {
+            this.CreateGroupIdResult = CreateGroupIdResult;
         }
     }
     
@@ -501,6 +632,74 @@ namespace ConsoleApplication1.ServiceReference1 {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GetUserIdByMailAddressRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GetUserIdByMailAddress", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequestBody Body;
+        
+        public GetUserIdByMailAddressRequest() {
+        }
+        
+        public GetUserIdByMailAddressRequest(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://colonywebappdb.azurewebsites.net/")]
+    public partial class GetUserIdByMailAddressRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string mailAddress;
+        
+        public GetUserIdByMailAddressRequestBody() {
+        }
+        
+        public GetUserIdByMailAddressRequestBody(string mailAddress) {
+            this.mailAddress = mailAddress;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GetUserIdByMailAddressResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GetUserIdByMailAddressResponse", Namespace="http://colonywebappdb.azurewebsites.net/", Order=0)]
+        public ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponseBody Body;
+        
+        public GetUserIdByMailAddressResponse() {
+        }
+        
+        public GetUserIdByMailAddressResponse(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://colonywebappdb.azurewebsites.net/")]
+    public partial class GetUserIdByMailAddressResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string GetUserIdByMailAddressResult;
+        
+        public GetUserIdByMailAddressResponseBody() {
+        }
+        
+        public GetUserIdByMailAddressResponseBody(string GetUserIdByMailAddressResult) {
+            this.GetUserIdByMailAddressResult = GetUserIdByMailAddressResult;
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface WebService1SoapChannel : ConsoleApplication1.ServiceReference1.WebService1Soap, System.ServiceModel.IClientChannel {
     }
@@ -551,20 +750,50 @@ namespace ConsoleApplication1.ServiceReference1 {
             return ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).HelloWorldAsync(inValue);
         }
         
-        public System.Guid CreateUserId() {
-            return base.Channel.CreateUserId();
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        ConsoleApplication1.ServiceReference1.CreateUserIdResponse ConsoleApplication1.ServiceReference1.WebService1Soap.CreateUserId(ConsoleApplication1.ServiceReference1.CreateUserIdRequest request) {
+            return base.Channel.CreateUserId(request);
         }
         
-        public System.Threading.Tasks.Task<System.Guid> CreateUserIdAsync() {
-            return base.Channel.CreateUserIdAsync();
+        public string CreateUserId() {
+            ConsoleApplication1.ServiceReference1.CreateUserIdRequest inValue = new ConsoleApplication1.ServiceReference1.CreateUserIdRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.CreateUserIdRequestBody();
+            ConsoleApplication1.ServiceReference1.CreateUserIdResponse retVal = ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).CreateUserId(inValue);
+            return retVal.Body.CreateUserIdResult;
         }
         
-        public System.Guid CreateGroupId() {
-            return base.Channel.CreateGroupId();
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateUserIdResponse> ConsoleApplication1.ServiceReference1.WebService1Soap.CreateUserIdAsync(ConsoleApplication1.ServiceReference1.CreateUserIdRequest request) {
+            return base.Channel.CreateUserIdAsync(request);
         }
         
-        public System.Threading.Tasks.Task<System.Guid> CreateGroupIdAsync() {
-            return base.Channel.CreateGroupIdAsync();
+        public System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateUserIdResponse> CreateUserIdAsync() {
+            ConsoleApplication1.ServiceReference1.CreateUserIdRequest inValue = new ConsoleApplication1.ServiceReference1.CreateUserIdRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.CreateUserIdRequestBody();
+            return ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).CreateUserIdAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        ConsoleApplication1.ServiceReference1.CreateGroupIdResponse ConsoleApplication1.ServiceReference1.WebService1Soap.CreateGroupId(ConsoleApplication1.ServiceReference1.CreateGroupIdRequest request) {
+            return base.Channel.CreateGroupId(request);
+        }
+        
+        public string CreateGroupId() {
+            ConsoleApplication1.ServiceReference1.CreateGroupIdRequest inValue = new ConsoleApplication1.ServiceReference1.CreateGroupIdRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.CreateGroupIdRequestBody();
+            ConsoleApplication1.ServiceReference1.CreateGroupIdResponse retVal = ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).CreateGroupId(inValue);
+            return retVal.Body.CreateGroupIdResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateGroupIdResponse> ConsoleApplication1.ServiceReference1.WebService1Soap.CreateGroupIdAsync(ConsoleApplication1.ServiceReference1.CreateGroupIdRequest request) {
+            return base.Channel.CreateGroupIdAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.CreateGroupIdResponse> CreateGroupIdAsync() {
+            ConsoleApplication1.ServiceReference1.CreateGroupIdRequest inValue = new ConsoleApplication1.ServiceReference1.CreateGroupIdRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.CreateGroupIdRequestBody();
+            return ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).CreateGroupIdAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -710,6 +939,31 @@ namespace ConsoleApplication1.ServiceReference1 {
             inValue.Body.oldNickname = oldNickname;
             inValue.Body.newNickname = newNickname;
             return ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).ModifyNickNameAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse ConsoleApplication1.ServiceReference1.WebService1Soap.GetUserIdByMailAddress(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest request) {
+            return base.Channel.GetUserIdByMailAddress(request);
+        }
+        
+        public string GetUserIdByMailAddress(string mailAddress) {
+            ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest inValue = new ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequestBody();
+            inValue.Body.mailAddress = mailAddress;
+            ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse retVal = ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).GetUserIdByMailAddress(inValue);
+            return retVal.Body.GetUserIdByMailAddressResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse> ConsoleApplication1.ServiceReference1.WebService1Soap.GetUserIdByMailAddressAsync(ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest request) {
+            return base.Channel.GetUserIdByMailAddressAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressResponse> GetUserIdByMailAddressAsync(string mailAddress) {
+            ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest inValue = new ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequest();
+            inValue.Body = new ConsoleApplication1.ServiceReference1.GetUserIdByMailAddressRequestBody();
+            inValue.Body.mailAddress = mailAddress;
+            return ((ConsoleApplication1.ServiceReference1.WebService1Soap)(this)).GetUserIdByMailAddressAsync(inValue);
         }
     }
 }

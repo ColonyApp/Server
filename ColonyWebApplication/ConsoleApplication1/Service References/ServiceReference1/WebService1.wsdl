@@ -19,7 +19,7 @@
       <s:element name="CreateUserIdResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="CreateUserIdResult" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="CreateUserIdResult" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -29,7 +29,7 @@
       <s:element name="CreateGroupIdResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="CreateGroupIdResult" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="CreateGroupIdResult" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -124,6 +124,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetUserIdByMailAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="mailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserIdByMailAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserIdByMailAddressResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
       <s:simpleType name="guid">
@@ -187,6 +201,12 @@
   <wsdl:message name="ModifyNickNameSoapOut">
     <wsdl:part name="parameters" element="tns:ModifyNickNameResponse" />
   </wsdl:message>
+  <wsdl:message name="GetUserIdByMailAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserIdByMailAddress" />
+  </wsdl:message>
+  <wsdl:message name="GetUserIdByMailAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserIdByMailAddressResponse" />
+  </wsdl:message>
   <wsdl:portType name="WebService1Soap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -223,6 +243,10 @@
     <wsdl:operation name="ModifyNickName">
       <wsdl:input message="tns:ModifyNickNameSoapIn" />
       <wsdl:output message="tns:ModifyNickNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserIdByMailAddress">
+      <wsdl:input message="tns:GetUserIdByMailAddressSoapIn" />
+      <wsdl:output message="tns:GetUserIdByMailAddressSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WebService1Soap" type="tns:WebService1Soap">
@@ -308,6 +332,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetUserIdByMailAddress">
+      <soap:operation soapAction="http://colonywebappdb.azurewebsites.net/GetUserIdByMailAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WebService1Soap12" type="tns:WebService1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -385,6 +418,15 @@
     </wsdl:operation>
     <wsdl:operation name="ModifyNickName">
       <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/ModifyNickName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserIdByMailAddress">
+      <soap12:operation soapAction="http://colonywebappdb.azurewebsites.net/GetUserIdByMailAddress" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
