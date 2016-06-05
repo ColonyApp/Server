@@ -9,10 +9,16 @@ using System.Web.Script.Services;
 
 namespace WebApplication1
 {
+    #region For HelloWorld class(sample)
+    /// <summary>
+    /// For HelloWorld class(sample)
+    /// </summary>
     public class test
     {
         public string name { get; set; }
     }
+    #endregion
+
     /// <summary>
     /// Summary description for WebService1
     /// </summary>
@@ -23,182 +29,257 @@ namespace WebApplication1
     [System.Web.Script.Services.ScriptService]
     public class WebService1 : System.Web.Services.WebService
     {
-
+        #region HelloWord
+        /// <summary>
+        /// HelloWord
+        /// </summary>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public string HelloWorld()
+        public void HelloWorld()
         {
-            test[] test = new test[]{ new test() { name = "Atsushi1"}, new test() { name = "Atsushi2"} };
+            test[] test = new test[]{ new test() { name = "HelloWord1" }, new test() { name = "HelloWord2" } };
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize(test);
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/json";
+            Context.Response.Write(js.Serialize(test));
         }
+        #endregion
 
+        #region UserId 生成
+        /// <summary>
+        /// UserId 生成
+        /// </summary>
         [WebMethod]
-        public String CreateUserId()
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateUserId()
         {
             Guid userId = Guid.NewGuid();
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize(userId);
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/json";
+            Context.Response.Write(js.Serialize(userId));
         }
+        #endregion
+
+        #region グループID生成
+        /// <summary>
+        /// グループID生成
+        /// </summary>
         [WebMethod]
-        public String CreateGroupId()
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateGroupId()
         {
             Guid groupId = Guid.NewGuid();
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize(groupId);
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/json";
+            Context.Response.Write(js.Serialize(groupId));
         }
-        private bool CanInput(string targetData, int targetDataStingLenght)
-        {
-            if (string.IsNullOrEmpty(targetData))
-            {
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(targetData))
-            {
-                return false;
-            }
-            if(targetData.Length >= targetDataStingLenght)
-            {
-                return false;
-            }
-            return true;
-        }
+        #endregion
+
+        #region ユーザー新規作成
+        /// <summary>
+        /// ユーザー新規作成（初めの１回のみ使用する）
+        /// </summary>
+        /// <param name="nickName">ニックネーム</param>
+        /// <param name="mailAddress">メールアドレス</param>
+        /// <param name="groupName">グループ名</param>
         [WebMethod]
-        public bool CreateUser(string nickName, string mailAddress, string groupName)
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateUser(string nickName, string mailAddress, string groupName)
         {
+            bool judgement = false;
             try
             {
-                /* 入力値チェック */
-                if(!CanInput(nickName, 301)) { return false; }
-                if(!CanInput(mailAddress, 301)) { return false; }
-                if(!CanInput(groupName, 351)) { return false; }
-
-                /* ユーザー作成時必須項目値生成 */
-                var userId = Guid.NewGuid();
-                var groupId = Guid.NewGuid();
-                var insertDateTime = DateTime.Now;
-
-                /* 新規作成対象データセット */
-                UserTable ut = new UserTable
+                /* 入力値チェック（必須チェック） */
+                judgement = CanInput(nickName, 301);
+                if (judgement)
                 {
-                    Id = userId,
-                    Nickname = nickName,
-                    MailAddress = mailAddress,
-                    IsLogicalDelete = false,
-                    CreateUser = userId,
-                    CreateDate = insertDateTime
-                };
-                GroupTable gt = new GroupTable
-                {
-                    GroupId = groupId,
-                    GroupName = groupName,
-                    IsLogicalDelete = false,
-                    CreateUser = userId,
-                    CreateDate = insertDateTime
-                };
-                UserGroupTable ugt = new UserGroupTable
-                {
-                    UserId = userId,
-                    GroupId01 = groupId,
-                    IsLogicalDelete = false,
-                    CreateUser = userId,
-                    CreateDate = insertDateTime
-                };
-                /* ユーザー新規追加 */
-                using (TransactionScope t = new TransactionScope())
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    judgement = CanInput(mailAddress, 301);
+                    if (judgement)
                     {
-                        c.UserTables.InsertOnSubmit(ut);
-                        c.GroupTables.InsertOnSubmit(gt);
-                        c.UserGroupTables.InsertOnSubmit(ugt);
-                        c.SubmitChanges();
-                    }
-                    t.Complete();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-        [WebMethod]
-        public bool IsExistsUser(string nickName, string mailAddress)
-        {
-            try
-            {
-                /* 入力値チェック */
-                if (!CanInput(nickName, 301)) { return false; }
-                if (!CanInput(mailAddress, 301)) { return false; }
-
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-                {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                })) {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
-                    {
-                        var query = from ut in c.UserTables
-                                    where ut.Nickname == nickName
-                                    where ut.MailAddress == mailAddress
-                                    where ut.IsLogicalDelete == false
-                                    select ut.Id;
-                        if (query.Count() == 1)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        judgement = CanInput(groupName, 351);
                     }
                 }
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-        [WebMethod]
-        public bool IsExistsGroup(string groupName)
-        {
-            try
-            {
-                /* 入力値チェック */
-                if (!CanInput(groupName, 351)) { return false; }
+                if (judgement)
+                {
+                    /* ユーザー作成時必須項目値生成 */
+                    var userId = Guid.NewGuid();
+                    var groupId = Guid.NewGuid();
+                    var insertDateTime = DateTime.Now;
 
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-                {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    /* 新規作成対象データセット */
+                    UserTable ut = new UserTable
                     {
-                        var query = from g in c.GroupTables
-                                    where g.GroupName == groupName
-                                    where g.IsLogicalDelete == false
-                                    select g.GroupId;
-                        if (query.Count() == 1)
+                        Id = userId,
+                        Nickname = nickName,
+                        MailAddress = mailAddress,
+                        IsLogicalDelete = false,
+                        CreateUser = userId,
+                        CreateDate = insertDateTime
+                    };
+                    GroupTable gt = new GroupTable
+                    {
+                        GroupId = groupId,
+                        GroupName = groupName,
+                        IsLogicalDelete = false,
+                        CreateUser = userId,
+                        CreateDate = insertDateTime
+                    };
+                    UserGroupTable ugt = new UserGroupTable
+                    {
+                        UserId = userId,
+                        GroupId01 = groupId,
+                        IsLogicalDelete = false,
+                        CreateUser = userId,
+                        CreateDate = insertDateTime
+                    };
+                    /* ユーザー新規追加 */
+                    using (TransactionScope t = new TransactionScope())
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            return true;
+                            c.UserTables.InsertOnSubmit(ut);
+                            c.GroupTables.InsertOnSubmit(gt);
+                            c.UserGroupTables.InsertOnSubmit(ugt);
+                            c.SubmitChanges();
                         }
-                        else
-                        {
-                            return false;
-                        }
+                        t.Complete();
                     }
+                    judgement = true;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
             }
         }
+        #endregion
+
+        #region ユーザーが存在するか確認
+        /// <summary>
+        /// ユーザーが存在するか確認
+        /// </summary>
+        /// <param name="nickName">ニックネーム</param>
+        /// <param name="mailAddress">メールアドレス</param>
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void IsExistsUser(string nickName, string mailAddress)
+        {
+            bool judgement = false;
+            try
+            {
+                /* 入力値チェック */
+                judgement = CanInput(nickName, 301);
+                if (judgement)
+                {
+                    judgement = CanInput(mailAddress, 301);
+                }
+                /* ユーザー存在チェック */
+                if (judgement)
+                {
+                    //検索操作はダーティーリードOKay
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                    {
+                        IsolationLevel = IsolationLevel.ReadCommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            //ニックネームとメールアドレスはAnd条件と論理削除されていないデータ
+                            var query = from ut in c.UserTables
+                                        where ut.Nickname == nickName
+                                        where ut.MailAddress == mailAddress
+                                        where ut.IsLogicalDelete == false
+                                        select ut.Id;
+                            //１件でなければならない
+                            if (query.Count() != 1)
+                            {
+                                judgement = false;
+                            }
+                        }
+                    }
+                    judgement = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
+            }
+        }
+        #endregion
+
+        #region グループが存在するか確認
+        /// <summary>
+        /// グループが存在するか確認
+        /// </summary>
+        /// <param name="groupName">グループ名</param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void IsExistsGroup(string groupName)
+        {
+            bool judgement = false;
+            try
+            {
+                /* 入力値チェック */
+                judgement = CanInput(groupName, 351);
+                if (judgement)
+                {
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                    {
+                        IsolationLevel = IsolationLevel.ReadCommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            var query = from g in c.GroupTables
+                                        where g.GroupName == groupName
+                                        where g.IsLogicalDelete == false
+                                        select g.GroupId;
+                            if (query.Count() != 1) { judgement = false; }
+                        }
+                    }
+                    judgement = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
+            }
+        }
+        #endregion
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public bool IsExistsUserGroupChainByName(string nickname, string groupName01)
         {
             try
@@ -242,6 +323,7 @@ namespace WebApplication1
             }
         }
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public bool IsExistsUserGroupChainById(Guid userId, Guid groupId)
         {
             try
@@ -281,6 +363,7 @@ namespace WebApplication1
             }
         }
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public bool ModifyNickName(Guid userId, string oldNickname, string newNickname)
         {
             try
@@ -319,6 +402,7 @@ namespace WebApplication1
         }
         //* ・メアドからUserIDを取得
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public String GetUserIdByMailAddress(String mailAddress)
         {
             try
@@ -354,6 +438,7 @@ namespace WebApplication1
         }
         //* ・ニックネームからUserIdを取得
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public String GetUserIdByNickName(String nickName)
         {
             try
@@ -403,5 +488,32 @@ namespace WebApplication1
         //* ・Give情報削除
         //* ・Give情報検索
 
+        #region 引数チェック基本メソッド
+        /// <summary>
+        /// 引数チェック基本メソッド1
+        /// </summary>
+        /// <param name="targetData">引数をチェックしたい対象</param>
+        /// <param name="targetDataStingLenght">チェック対象の最大文字数＋１</param>
+        /// <returns>
+        /// true:NULLではなく、空欄でもなく、スペースのみでもなくチェック対象の最大文字数より小さい
+        /// false;NULLもしくは、空欄もしくは、スペースもしくはチェック対象の最大文字数より小さい
+        /// </returns>
+        private bool CanInput(string targetData, int targetDataStingLenght)
+        {
+            if (string.IsNullOrEmpty(targetData))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(targetData))
+            {
+                return false;
+            }
+            if (targetData.Length >= targetDataStingLenght)
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
     }
 }
