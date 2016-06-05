@@ -227,56 +227,6 @@ namespace WebApplication1
                         {
                             return false;
                         }
-
-                        //join g02 in c.GroupTables on ug.GroupId02 equals g02.GroupId
-                        //join g03 in c.GroupTables on ug.GroupId03 equals g03.GroupId
-                        //join g04 in c.GroupTables on ug.GroupId04 equals g04.GroupId
-                        //join g05 in c.GroupTables on ug.GroupId05 equals g05.GroupId
-                        //join g06 in c.GroupTables on ug.GroupId06 equals g06.GroupId
-                        //join g07 in c.GroupTables on ug.GroupId07 equals g07.GroupId
-                        //join g08 in c.GroupTables on ug.GroupId08 equals g08.GroupId
-                        //join g09 in c.GroupTables on ug.GroupId09 equals g09.GroupId
-                        //join g10 in c.GroupTables on ug.GroupId10 equals g10.GroupId
-                        //join g11 in c.GroupTables on ug.GroupId11 equals g11.GroupId
-                        //join g12 in c.GroupTables on ug.GroupId12 equals g12.GroupId
-                        //join g13 in c.GroupTables on ug.GroupId13 equals g13.GroupId
-                        //join g14 in c.GroupTables on ug.GroupId14 equals g14.GroupId
-                        //join g15 in c.GroupTables on ug.GroupId15 equals g15.GroupId
-                        //join g16 in c.GroupTables on ug.GroupId16 equals g16.GroupId
-                        //join g17 in c.GroupTables on ug.GroupId17 equals g17.GroupId
-                        //join g18 in c.GroupTables on ug.GroupId18 equals g18.GroupId
-                        //join g19 in c.GroupTables on ug.GroupId19 equals g19.GroupId
-                        //join g20 in c.GroupTables on ug.GroupId20 equals g20.GroupId
-                        //join g21 in c.GroupTables on ug.GroupId21 equals g21.GroupId
-                        //join g22 in c.GroupTables on ug.GroupId22 equals g22.GroupId
-                        //join g23 in c.GroupTables on ug.GroupId23 equals g23.GroupId
-                        //join g24 in c.GroupTables on ug.GroupId24 equals g24.GroupId
-                        //join g25 in c.GroupTables on ug.GroupId25 equals g25.GroupId
-                        //join g26 in c.GroupTables on ug.GroupId26 equals g26.GroupId
-                        //join g27 in c.GroupTables on ug.GroupId27 equals g27.GroupId
-                        //join g28 in c.GroupTables on ug.GroupId28 equals g28.GroupId
-                        //join g29 in c.GroupTables on ug.GroupId29 equals g29.GroupId
-                        //join g30 in c.GroupTables on ug.GroupId30 equals g30.GroupId
-                        //join g31 in c.GroupTables on ug.GroupId31 equals g31.GroupId
-                        //join g32 in c.GroupTables on ug.GroupId32 equals g32.GroupId
-                        //join g33 in c.GroupTables on ug.GroupId33 equals g33.GroupId
-                        //join g34 in c.GroupTables on ug.GroupId34 equals g34.GroupId
-                        //join g35 in c.GroupTables on ug.GroupId35 equals g35.GroupId
-                        //join g36 in c.GroupTables on ug.GroupId36 equals g36.GroupId
-                        //join g37 in c.GroupTables on ug.GroupId37 equals g37.GroupId
-                        //join g38 in c.GroupTables on ug.GroupId38 equals g38.GroupId
-                        //join g39 in c.GroupTables on ug.GroupId39 equals g39.GroupId
-                        //join g40 in c.GroupTables on ug.GroupId40 equals g40.GroupId
-                        //join g41 in c.GroupTables on ug.GroupId41 equals g41.GroupId
-                        //join g42 in c.GroupTables on ug.GroupId42 equals g42.GroupId
-                        //join g43 in c.GroupTables on ug.GroupId43 equals g43.GroupId
-                        //join g44 in c.GroupTables on ug.GroupId44 equals g44.GroupId
-                        //join g45 in c.GroupTables on ug.GroupId45 equals g45.GroupId
-                        //join g46 in c.GroupTables on ug.GroupId46 equals g46.GroupId
-                        //join g47 in c.GroupTables on ug.GroupId47 equals g47.GroupId
-                        //join g48 in c.GroupTables on ug.GroupId48 equals g48.GroupId
-                        //join g49 in c.GroupTables on ug.GroupId49 equals g49.GroupId
-                        //join g50 in c.GroupTables on ug.GroupId50 equals g50.GroupId
                     }
                 }
             }
@@ -313,56 +263,6 @@ namespace WebApplication1
                         {
                             return false;
                         }
-
-                        //join g02 in c.GroupTables on ug.GroupId02 equals g02.GroupId
-                        //join g03 in c.GroupTables on ug.GroupId03 equals g03.GroupId
-                        //join g04 in c.GroupTables on ug.GroupId04 equals g04.GroupId
-                        //join g05 in c.GroupTables on ug.GroupId05 equals g05.GroupId
-                        //join g06 in c.GroupTables on ug.GroupId06 equals g06.GroupId
-                        //join g07 in c.GroupTables on ug.GroupId07 equals g07.GroupId
-                        //join g08 in c.GroupTables on ug.GroupId08 equals g08.GroupId
-                        //join g09 in c.GroupTables on ug.GroupId09 equals g09.GroupId
-                        //join g10 in c.GroupTables on ug.GroupId10 equals g10.GroupId
-                        //join g11 in c.GroupTables on ug.GroupId11 equals g11.GroupId
-                        //join g12 in c.GroupTables on ug.GroupId12 equals g12.GroupId
-                        //join g13 in c.GroupTables on ug.GroupId13 equals g13.GroupId
-                        //join g14 in c.GroupTables on ug.GroupId14 equals g14.GroupId
-                        //join g15 in c.GroupTables on ug.GroupId15 equals g15.GroupId
-                        //join g16 in c.GroupTables on ug.GroupId16 equals g16.GroupId
-                        //join g17 in c.GroupTables on ug.GroupId17 equals g17.GroupId
-                        //join g18 in c.GroupTables on ug.GroupId18 equals g18.GroupId
-                        //join g19 in c.GroupTables on ug.GroupId19 equals g19.GroupId
-                        //join g20 in c.GroupTables on ug.GroupId20 equals g20.GroupId
-                        //join g21 in c.GroupTables on ug.GroupId21 equals g21.GroupId
-                        //join g22 in c.GroupTables on ug.GroupId22 equals g22.GroupId
-                        //join g23 in c.GroupTables on ug.GroupId23 equals g23.GroupId
-                        //join g24 in c.GroupTables on ug.GroupId24 equals g24.GroupId
-                        //join g25 in c.GroupTables on ug.GroupId25 equals g25.GroupId
-                        //join g26 in c.GroupTables on ug.GroupId26 equals g26.GroupId
-                        //join g27 in c.GroupTables on ug.GroupId27 equals g27.GroupId
-                        //join g28 in c.GroupTables on ug.GroupId28 equals g28.GroupId
-                        //join g29 in c.GroupTables on ug.GroupId29 equals g29.GroupId
-                        //join g30 in c.GroupTables on ug.GroupId30 equals g30.GroupId
-                        //join g31 in c.GroupTables on ug.GroupId31 equals g31.GroupId
-                        //join g32 in c.GroupTables on ug.GroupId32 equals g32.GroupId
-                        //join g33 in c.GroupTables on ug.GroupId33 equals g33.GroupId
-                        //join g34 in c.GroupTables on ug.GroupId34 equals g34.GroupId
-                        //join g35 in c.GroupTables on ug.GroupId35 equals g35.GroupId
-                        //join g36 in c.GroupTables on ug.GroupId36 equals g36.GroupId
-                        //join g37 in c.GroupTables on ug.GroupId37 equals g37.GroupId
-                        //join g38 in c.GroupTables on ug.GroupId38 equals g38.GroupId
-                        //join g39 in c.GroupTables on ug.GroupId39 equals g39.GroupId
-                        //join g40 in c.GroupTables on ug.GroupId40 equals g40.GroupId
-                        //join g41 in c.GroupTables on ug.GroupId41 equals g41.GroupId
-                        //join g42 in c.GroupTables on ug.GroupId42 equals g42.GroupId
-                        //join g43 in c.GroupTables on ug.GroupId43 equals g43.GroupId
-                        //join g44 in c.GroupTables on ug.GroupId44 equals g44.GroupId
-                        //join g45 in c.GroupTables on ug.GroupId45 equals g45.GroupId
-                        //join g46 in c.GroupTables on ug.GroupId46 equals g46.GroupId
-                        //join g47 in c.GroupTables on ug.GroupId47 equals g47.GroupId
-                        //join g48 in c.GroupTables on ug.GroupId48 equals g48.GroupId
-                        //join g49 in c.GroupTables on ug.GroupId49 equals g49.GroupId
-                        //join g50 in c.GroupTables on ug.GroupId50 equals g50.GroupId
                     }
                 }
             }
@@ -408,6 +308,25 @@ namespace WebApplication1
             }
             return false;
         }
+
+        
+         //* ・メアドからUserIDを取得
+         //* ・ニックネームからUserIdを取得
+         //* ・グループ名からGroupIDを取得
+         //* ・UserIDとGroupIDからそれらの関係性が正しいか判断
+         //* ・TargetIDを取得（GUID）
+         //* ・Want情報作成
+         //* ・Want情報変更
+         //* ・Want情報削除
+         //* ・Want情報検索
+         //* ・Get情報作成
+         //* ・Get情報更新
+         //* ・Get情報削除
+         //* ・Get情報検索
+         //* ・Give情報作成
+         //* ・Give情報更新
+         //* ・Give情報削除
+         //* ・Give情報検索
 
     }
 }
