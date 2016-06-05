@@ -93,4 +93,45 @@
       <Association Name="UserTable_UserGroupTable" Member="UserTable" ThisKey="UserId" OtherKey="Id" Type="UserTable" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.TargetDataTable" Member="TargetDataTable">
+    <Type Name="TargetDataTable">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WhatAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="WhenAttribute" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="WhyAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="WhoAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="whereAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="WhomAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="HowAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="HowMuchAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="HowManyAttribute" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="IsLogicalDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreateUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="UpdateUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="DeleteUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="RelationsipTable_TargetDataTable" Member="RelationsipTable" ThisKey="Id" OtherKey="Id" Type="RelationsipTable" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RelationsipTable" Member="RelationsipTable">
+    <Type Name="RelationsipTable">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Mode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OccurrenceDateTime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="WantDateTime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="GetDateTime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="GiveDateTime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="IsComplete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLogicalDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreateUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="UpdateUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="DeleteUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="DeleteDate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="RelationsipTable_TargetDataTable" Member="TargetDataTable" ThisKey="Id" OtherKey="Id" Type="TargetDataTable" />
+    </Type>
+  </Table>
 </Database>

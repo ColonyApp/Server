@@ -7,7 +7,7 @@
     <title></title>
     <style type="text/css">
         .auto-style1 {
-            width: 55%;
+            width: 31%;
         }
         .auto-style2 {
             width: 463px;
