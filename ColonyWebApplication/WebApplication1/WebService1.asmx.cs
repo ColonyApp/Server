@@ -190,7 +190,7 @@ namespace WebApplication1
                     //検索操作はダーティーリードOKay
                     using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        IsolationLevel = IsolationLevel.ReadCommitted,
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
                         Timeout = TransactionManager.DefaultTimeout,
                     }))
                     {
@@ -246,16 +246,16 @@ namespace WebApplication1
                 {
                     using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        IsolationLevel = IsolationLevel.ReadCommitted,
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
                         Timeout = TransactionManager.DefaultTimeout,
                     }))
                     {
                         using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
                             var query = from g in c.GroupTables
-                                        where g.GroupName == groupName
-                                        where g.IsLogicalDelete == false
-                                        select g.GroupId;
+                                              where g.GroupName == groupName
+                                              where g.IsLogicalDelete == false
+                                              select g.GroupId;
                             if (query.Count() != 1) { judgement = false; }
                         }
                     }
@@ -278,80 +278,110 @@ namespace WebApplication1
         }
         #endregion
 
+        #region ニックネームとグループ名が紐づくか確認する
+        /// <summary>
+        /// ニックネームとグループ名が紐づくか確認する
+        /// </summary>
+        /// <param name="nickname">ニックネーム</param>
+        /// <param name="groupName01">グループ１</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public bool IsExistsUserGroupChainByName(string nickname, string groupName01)
+        public void IsExistsUserGroupChainByName(string nickname, string groupName01)
         {
+            bool judgement = false;
             try
             {
                 /* 入力値チェック */
-                if (!CanInput(nickname, 301)) { return false; }
-                if (!CanInput(groupName01, 351)) { return false; }
-
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                judgement = CanInput(nickname, 301);
+                if (judgement)
                 {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
+                    judgement = CanInput(groupName01, 351);
+                }
+                if (judgement)
                 {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        var query = from u in c.UserTables
-                                    join ug in c.UserGroupTables on u.Id equals ug.UserId
-                                    join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
-                                    where u.Nickname == nickname
-                                    where g01.GroupName == groupName01
-                                    where u.IsLogicalDelete == false
-                                    where ug.IsLogicalDelete == false
-                                    where g01.IsLogicalDelete == false
-                                    select u.Id;
-                        if (query.Count() == 1)
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            var query = from u in c.UserTables
+                                        join ug in c.UserGroupTables on u.Id equals ug.UserId
+                                        join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
+                                        where u.Nickname == nickname
+                                        where g01.GroupName == groupName01
+                                        where u.IsLogicalDelete == false
+                                        where ug.IsLogicalDelete == false
+                                        where g01.IsLogicalDelete == false
+                                        select u.Id;
+                            if (query.Count() != 1)
+                            {
+                                judgement = false;
+                            }
                         }
                     }
+                    judgement = true;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
             }
         }
+        #endregion
+
+        #region ユーザーIDとグループIDが紐づくか確認する
+        /// <summary>
+        /// ユーザーIDとグループIDが紐づくか確認する 
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="groupId">グループID</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public bool IsExistsUserGroupChainById(Guid userId, Guid groupId)
+        public void IsExistsUserGroupChainById(Guid userId, Guid groupId)
         {
+            bool judgement = true;
             try
             {
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                Guid p = new Guid();
+                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
+                p = new Guid();
+                if (!Guid.TryParse(groupId.ToString(), out p) & judgement == true) { judgement = false; }
+                if (judgement)
                 {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        var query = from u in c.UserTables
-                                    join ug in c.UserGroupTables on u.Id equals ug.UserId
-                                    join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
-                                    where u.Id == userId
-                                    where g01.GroupId == groupId
-                                    where u.IsLogicalDelete == false
-                                    where ug.IsLogicalDelete == false
-                                    where g01.IsLogicalDelete == false
-                                    select u.Id;
-                        if (query.Count() == 1)
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            var query = from u in c.UserTables
+                                        join ug in c.UserGroupTables on u.Id equals ug.UserId
+                                        join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
+                                        where u.Id == userId
+                                        where g01.GroupId == groupId
+                                        where u.IsLogicalDelete == false
+                                        where ug.IsLogicalDelete == false
+                                        where g01.IsLogicalDelete == false
+                                        select u.Id;
+                            if (query.Count() != 1)
+                            {
+                                judgement = false;
+                            }
+                            judgement = true;
                         }
                     }
                 }
@@ -359,47 +389,85 @@ namespace WebApplication1
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
             }
         }
+        #endregion
+
+        #region ニックネーム変更
+        /// <summary>
+        /// ニックネーム変更
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="oldNickname">修正前のニックネーム</param>
+        /// <param name="newNickname">修正後のニックネーム</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public bool ModifyNickName(Guid userId, string oldNickname, string newNickname)
+        public void ModifyNickName(Guid userId, string oldNickname, string newNickname)
         {
+            bool judgement = false;
             try
             {
                 /* 入力値チェック */
-                if (!CanInput(oldNickname, 301)) { return false; }
-                if (!CanInput(newNickname, 301)) { return false; }
-
-                /* ユーザー修正 */
-                using (TransactionScope t = new TransactionScope())
+                Guid p = new Guid();
+                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
+                if (judgement)
                 {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    judgement = CanInput(oldNickname, 301);
+                    if (judgement)
                     {
-                        var query = from ut in c.UserTables
-                                    where ut.Nickname == oldNickname
-                                    where ut.Id == userId
-                                    where ut.IsLogicalDelete == false
-                                    select ut;
-
-                        if (query.Count() != 1) { return false; }
-
-                        foreach (UserTable u in query)
+                        judgement = CanInput(newNickname, 301);
+                    }
+                }
+                if (judgement)
+                {
+                    /* ユーザー修正 */
+                    using (TransactionScope t = new TransactionScope())
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            u.Nickname = newNickname;
+                            var query = from ut in c.UserTables
+                                        where ut.Nickname == oldNickname
+                                        where ut.Id == userId
+                                        where ut.IsLogicalDelete == false
+                                        select ut;
+
+                            if (query.Count() != 1) { judgement = false; }
+
+                            foreach (UserTable u in query)
+                            {
+                                u.Nickname = newNickname;
+                            }
+                            c.SubmitChanges();
+                            judgement = true;
                         }
-                        c.SubmitChanges();
-                        return true;
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                judgement = false;
             }
-            return false;
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
+            }
         }
+        #endregion
+
         //* ・メアドからUserIDを取得
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
@@ -410,7 +478,7 @@ namespace WebApplication1
                 string returnValue = string.Empty;
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    IsolationLevel = IsolationLevel.ReadUncommitted,
                     Timeout = TransactionManager.DefaultTimeout,
                 }))
                 {
@@ -446,7 +514,7 @@ namespace WebApplication1
                 string returnValue = string.Empty;
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
-                    IsolationLevel = IsolationLevel.ReadCommitted,
+                    IsolationLevel = IsolationLevel.ReadUncommitted,
                     Timeout = TransactionManager.DefaultTimeout,
                 }))
                 {
@@ -509,6 +577,23 @@ namespace WebApplication1
                 return false;
             }
             if (targetData.Length >= targetDataStingLenght)
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// 引数チェックメソッド２
+        /// </summary>
+        /// <param name="targetData"></param>
+        /// <returns></returns>
+        private bool CanInput(string targetData)
+        {
+            if (string.IsNullOrEmpty(targetData))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(targetData))
             {
                 return false;
             }
