@@ -595,9 +595,9 @@ namespace WebApplication1
         }
         #endregion
 
-        #region TargetIDを取得（GUID）
+        #region TargetIDを新規作成（GUID）
         /// <summary>
-        /// TargetIDを取得（GUID）
+        /// TargetIDを新規作成
         /// </summary>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
