@@ -341,67 +341,6 @@ namespace WebApplication1
         }
         #endregion
 
-        #region ユーザーIDとグループIDが紐づくか確認する
-        /// <summary>
-        /// ユーザーIDとグループIDが紐づくか確認する 
-        /// </summary>
-        /// <param name="userId">ユーザーID</param>
-        /// <param name="groupId">グループID</param>
-        [WebMethod]
-        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void IsExistsUserGroupChainById(Guid userId, Guid groupId)
-        {
-            bool judgement = true;
-            try
-            {
-                Guid p = new Guid();
-                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
-                p = new Guid();
-                if (!Guid.TryParse(groupId.ToString(), out p) & judgement == true) { judgement = false; }
-                if (judgement)
-                {
-                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-                    {
-                        IsolationLevel = IsolationLevel.ReadUncommitted,
-                        Timeout = TransactionManager.DefaultTimeout,
-                    }))
-                    {
-                        using (DataClasses1DataContext c = new DataClasses1DataContext())
-                        {
-                            var query = from u in c.UserTables
-                                        join ug in c.UserGroupTables on u.Id equals ug.UserId
-                                        join g01 in c.GroupTables on ug.GroupId01 equals g01.GroupId
-                                        where u.Id == userId
-                                        where g01.GroupId == groupId
-                                        where u.IsLogicalDelete == false
-                                        where ug.IsLogicalDelete == false
-                                        where g01.IsLogicalDelete == false
-                                        select u.Id;
-                            if (query.Count() != 1)
-                            {
-                                judgement = false;
-                            }
-                            judgement = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                judgement = false;
-            }
-            finally
-            {
-                /* 最終的には judgement の値を返す */
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                Context.Response.Clear();
-                Context.Response.ContentType = "application/json";
-                Context.Response.Write(js.Serialize(judgement));
-            }
-        }
-        #endregion
-
         #region ニックネーム変更
         /// <summary>
         /// ニックネーム変更
@@ -468,93 +407,423 @@ namespace WebApplication1
         }
         #endregion
 
-        //* ・メアドからUserIDを取得
+        #region メアド変更
+        /// <summary>
+        /// メールアドレス変更
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="oldMailAddress">修正前メールアドレス</param>
+        /// <param name="newMailAddress">修正後メールアドレス</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public String GetUserIdByMailAddress(String mailAddress)
+        public void ModifyMailAddress(Guid userId, string oldMailAddress, string newMailAddress)
         {
+            bool judgement = false;
             try
             {
-                string returnValue = string.Empty;
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                /* 入力値チェック */
+                Guid p = new Guid();
+                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
+                if (judgement)
                 {
-                    IsolationLevel = IsolationLevel.ReadUncommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    judgement = CanInput(oldMailAddress, 301);
+                    if (judgement)
                     {
-                        var userTables = from u in c.UserTables
-                                    where u.MailAddress == mailAddress
-                                    where u.IsLogicalDelete == false
-                                    select u;
-                        if (userTables.Count() != 1) { return String.Empty; }
-                        foreach(UserTable userTable in userTables)
+                        judgement = CanInput(newMailAddress, 301);
+                    }
+                }
+                if (judgement)
+                {
+                    /* ユーザー修正 */
+                    using (TransactionScope t = new TransactionScope())
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            returnValue = userTable.Id.ToString();
+                            var query = from ut in c.UserTables
+                                        where ut.Nickname == oldMailAddress
+                                        where ut.Id == userId
+                                        where ut.IsLogicalDelete == false
+                                        select ut;
+
+                            if (query.Count() != 1) { judgement = false; }
+
+                            foreach (UserTable u in query)
+                            {
+                                u.MailAddress = newMailAddress;
+                            }
+                            c.SubmitChanges();
+                            judgement = true;
                         }
                     }
                 }
-                return returnValue;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return String.Empty;
+                judgement = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(judgement));
             }
 
         }
-        //* ・ニックネームからUserIdを取得
+        #endregion
+
+        #region グループ追加
+        #endregion
+
+        #region グループ変更
+        #endregion
+
+        #region グループ削除
+        #endregion
+
+        #region タグ追加
+        #endregion
+
+        #region タグ修正
+        #endregion
+
+        #region メアドからUserIDを取得
+        /// <summary>
+        /// メアドからUserIDを取得 
+        /// </summary>
+        /// <param name="mailAddress">メールアドレス</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public String GetUserIdByNickName(String nickName)
+        public void GetUserIdByMailAddress(String mailAddress)
         {
+            string returnValue = string.Empty;
             try
             {
-                string returnValue = string.Empty;
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                if(!CanInput(mailAddress, 301))
                 {
-                    IsolationLevel = IsolationLevel.ReadUncommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        var userTables = from u in c.UserTables
-                                         where u.Nickname == nickName
-                                         where u.IsLogicalDelete == false
-                                         select u;
-                        if (userTables.Count() != 1) { return String.Empty; }
-                        foreach (UserTable userTable in userTables)
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
                         {
-                            returnValue = userTable.Id.ToString();
+                            var userTables = from u in c.UserTables
+                                             where u.MailAddress == mailAddress
+                                             where u.IsLogicalDelete == false
+                                             select u;
+                            if (userTables.Count() != 1) { returnValue = String.Empty; }
+                            foreach (UserTable userTable in userTables)
+                            {
+                                returnValue = userTable.Id.ToString();
+                            }
                         }
                     }
+                }else
+                {
+                    returnValue = string.Empty;
                 }
-                return returnValue;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return String.Empty;
+                returnValue = String.Empty;
             }
-
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
         }
-        //* ・グループ名からGroupIDを取得
-        //* ・UserIDとGroupIDからそれらの関係性が正しいか判断
-        //* ・TargetIDを取得（GUID）
-        //* ・Want情報作成
-        //* ・Want情報変更
-        //* ・Want情報削除
-        //* ・Want情報検索
-        //* ・Get情報作成
-        //* ・Get情報更新
-        //* ・Get情報削除
-        //* ・Get情報検索
-        //* ・Give情報作成
-        //* ・Give情報更新
-        //* ・Give情報削除
-        //* ・Give情報検索
+        #endregion
+
+        #region グループ名からGroupIDを取得
+        /// <summary>
+        /// グループ名からGroupIDを取得
+        /// </summary>
+        /// <param name="groupName">グループ名</param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void GetGroupIdByGroupName(string groupName)
+        {
+            string groupId = string.Empty;
+            try
+            {
+                /* 入力値チェック */
+                if (!CanInput(groupName, 351))
+                {
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                    {
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            var query = from g in c.GroupTables
+                                        where g.GroupName == groupName
+                                        where g.IsLogicalDelete == false
+                                        select g;
+                            if (query.Count() != 1) { groupId = string.Empty; }
+                            foreach (GroupTable gt in query)
+                            {
+                                groupId = gt.GroupId.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                groupId = string.Empty;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(groupId));
+            }
+        }
+        #endregion
+
+        #region TargetIDを取得（GUID）
+        /// <summary>
+        /// TargetIDを取得（GUID）
+        /// </summary>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateTargetId()
+        {
+            Guid targetId = Guid.NewGuid();
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/json";
+            Context.Response.Write(js.Serialize(targetId));
+        }
+        #endregion
+
+        #region 情報作成
+        /// <summary>
+        /// 情報作成
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="mode">モード</param>
+        /// <param name="tags">タグ</param>
+        /// <param name="groupName">グループ名</param>
+        /// <param name="whatAttribute">Whatの内容</param>
+        /// <param name="whenAttribute">Whenの内容</param>
+        /// <param name="whyAttribute">Whyの内容</param>
+        /// <param name="whoAttribute">Whoの内容</param>
+        /// <param name="whereAttribute">whereの内容</param>
+        /// <param name="whomAttribute">whomの内容</param>
+        /// <param name="howAttribute">howの内容</param>
+        /// <param name="howMuchAttribute">how muchの内容</param>
+        /// <param name="howManyAttribute">how manyの内容</param>
+        /// <returns>
+        ///  false : 作成失敗,
+        ///  true  : 作成OK
+        /// </returns>
+        private bool CreateTargetData(string userId, int mode, string tags, string groupName
+                                                  , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                  , string whereAttribute, string whomAttribute, string howAttribute
+                                                  , string howMuchAttribute, string howManyAttribute)
+        {
+            /* バリデーション */
+            // ・引数のものは全部必須入力項目
+            // ・チェックは何か値が入っている
+            // ・ユーザーIDはGUIDに変換可能である
+            // ・WhenAttributeは日付型に変換可能である
+            bool returnValue = false;
+            try
+            {
+                /* バリデーション */
+                if (CanInput(userId)) { returnValue = true; }
+                if (returnValue == true & CanInput(tags)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(groupName)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whatAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whenAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whyAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whoAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whereAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whomAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howMuchAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howManyAttribute)) { returnValue = true; } else { returnValue = false; }
+                Guid gp;
+                if (returnValue == true & Guid.TryParse(userId, out gp)) { returnValue = true; } else { returnValue = false; }
+                DateTime dp;
+                if (returnValue == true & DateTime.TryParse(userId, out dp)) { returnValue = true; } else { returnValue = false; }
+
+                if (returnValue)
+                {
+                    /* 入力値変換 */
+                    Guid GUIDuserId = Guid.Parse(userId);
+                    DateTime DatetimeWhenAttribute = DateTime.Parse(whenAttribute);
+                    DateTime nowDateTime = DateTime.Now;
+                    Guid targetDataId = Guid.NewGuid();
+                    /* Insert対象データ生成 */
+                    UserTargetDataTable utdt = new UserTargetDataTable
+                    {
+                        UserId = GUIDuserId,
+                        TargetDataId = targetDataId,
+                        IsLogicalDelete = false,
+                        CreateUser = GUIDuserId,
+                        CreateDate = nowDateTime
+                    };
+                    TargetDataTable tdt = new TargetDataTable
+                    {
+                        Id = targetDataId,
+                        Mode = mode,
+                        Tags = tags,
+                        WhatAttribute = whatAttribute,
+                        WhenAttribute = DatetimeWhenAttribute,
+                        WhyAttribute = whyAttribute,
+                        WhoAttribute = GUIDuserId,
+                        WhereAttribute = whereAttribute,
+                        WhomAttribute = whomAttribute,
+                        HowAttribute = howAttribute,
+                        HowMuchAttribute = howMuchAttribute,
+                        HowManyAttribute = howManyAttribute,
+                        GroupNames = groupName,
+                        IsLogicalDelete = false,
+                        CreateUser = GUIDuserId,
+                        CreateDate = nowDateTime
+                    };
+                    /* 2テーブルは同一トランザクション内でデータ挿入する */
+                    using (TransactionScope t = new TransactionScope())
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            c.TargetDataTable.InsertOnSubmit(tdt);
+                            c.UserTargetDataTable.InsertOnSubmit(utdt);
+                            c.SubmitChanges();
+                        }
+                        t.Complete();
+                        returnValue = true;
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                returnValue =  false;
+            }
+            return returnValue;
+        }
+        #endregion
+
+        #region 情報変更
+        private bool modifyTargetData(string userId, int mode, string tags, string groupName, string targetDataID
+                                                  , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                  , string whereAttribute, string whomAttribute, string howAttribute
+                                                  , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                /* バリデーション */
+                // ・引数のものは全部必須入力項目
+                // ・チェックは何か値が入っている
+                // ・ユーザーID、ターゲットデータIDはGUIDに変換可能である
+                // ・WhenAttributeは日付型に変換可能である
+                if (CanInput(userId)) { returnValue = true; }
+                if (returnValue == true & CanInput(tags)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(groupName)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whatAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whenAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whyAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whoAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whereAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(whomAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howMuchAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(howManyAttribute)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & CanInput(targetDataID)) { returnValue = true; } else { returnValue = false; }
+                Guid gp;
+                if(returnValue == true & Guid.TryParse(userId, out gp)) { returnValue = true; } else { returnValue = false; }
+                DateTime dp;
+                if (returnValue == true & DateTime.TryParse(userId, out dp)) { returnValue = true; } else { returnValue = false; }
+                if (returnValue == true & Guid.TryParse(targetDataID, out gp)) { returnValue = true; } else { returnValue = false; }
+
+                if (returnValue)
+                {
+                    /* 入力値変換 */
+                    Guid GUIDuserId = Guid.Parse(userId);
+                    DateTime DatetimeWhenAttribute = DateTime.Parse(whenAttribute);
+                    Guid GUIDTargetDataId = Guid.Parse(targetDataID);
+                    DateTime nowDateTime = DateTime.Now;
+                    Guid targetDataId = Guid.NewGuid();
+                    /* 2テーブルは同一トランザクション内でデータ挿入する */
+                    using (TransactionScope t = new TransactionScope())
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            //念のためUserTargetDataTableとtargetDataTableをJoinしたものを更新データの対象とする
+                            var query =
+                                from utdt in c.UserTargetDataTable
+                                join tdt in c.TargetDataTable on utdt.TargetDataId equals tdt.Id
+                                where utdt.TargetDataId == GUIDTargetDataId
+                                where utdt.UserId == GUIDuserId
+                                where utdt.IsLogicalDelete == false
+                                where tdt.IsLogicalDelete == false
+                                select tdt;
+
+                            foreach(TargetDataTable td in query)
+                            {
+                                td.Mode = mode;
+                                td.Tags = tags;
+                                td.WhatAttribute = whatAttribute;
+                                td.WhenAttribute = DatetimeWhenAttribute;
+                                td.WhyAttribute = whyAttribute;
+                                td.WhoAttribute = GUIDuserId;
+                                td.WhereAttribute = whereAttribute;
+                                td.WhomAttribute = whomAttribute;
+                                td.HowAttribute = howAttribute;
+                                td.HowMuchAttribute = howMuchAttribute;
+                                td.HowManyAttribute = howManyAttribute;
+                                td.GroupNames = groupName;
+                                td.IsLogicalDelete = false;
+                                td.UpdateUser = GUIDuserId;
+                                td.UpdateDate = nowDateTime;
+                            }
+                            c.SubmitChanges();
+                        }
+                        t.Complete();
+                        returnValue = true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                returnValue = false;
+            }
+            return returnValue;
+        }
+        #endregion
+
+        //情報削除
+        //検索(summary→リスト)
+        //検索(detail→リストから選択されたもの)
+        //Want情報作成
+        //Want情報更新
+        //Want情報削除
+        //Want情報検索
+        //Get情報作成
+        //Get情報更新
+        //Get情報削除
+        //Get情報検索
+        //Give情報作成
+        //Give情報更新
+        //Give情報削除
+        //Give情報検索
 
         #region 引数チェック基本メソッド
         /// <summary>

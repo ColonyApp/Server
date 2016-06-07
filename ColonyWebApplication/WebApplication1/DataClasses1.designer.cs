@@ -42,9 +42,9 @@ namespace WebApplication1
     partial void InsertTargetDataTable(TargetDataTable instance);
     partial void UpdateTargetDataTable(TargetDataTable instance);
     partial void DeleteTargetDataTable(TargetDataTable instance);
-    partial void InsertRelationsipTable(RelationsipTable instance);
-    partial void UpdateRelationsipTable(RelationsipTable instance);
-    partial void DeleteRelationsipTable(RelationsipTable instance);
+    partial void InsertUserTargetDataTable(UserTargetDataTable instance);
+    partial void UpdateUserTargetDataTable(UserTargetDataTable instance);
+    partial void DeleteUserTargetDataTable(UserTargetDataTable instance);
     #endregion
 		
 		public DataClasses1DataContext() : 
@@ -109,11 +109,11 @@ namespace WebApplication1
 			}
 		}
 		
-		public System.Data.Linq.Table<RelationsipTable> RelationsipTable
+		public System.Data.Linq.Table<UserTargetDataTable> UserTargetDataTable
 		{
 			get
 			{
-				return this.GetTable<RelationsipTable>();
+				return this.GetTable<UserTargetDataTable>();
 			}
 		}
 	}
@@ -2226,15 +2226,21 @@ namespace WebApplication1
 		
 		private System.Guid _Id;
 		
+		private int _Mode;
+		
+		private string _Tags;
+		
+		private System.Nullable<System.DateTime> _OccurrenceDateTime;
+		
 		private string _WhatAttribute;
 		
 		private System.Nullable<System.DateTime> _WhenAttribute;
 		
 		private string _WhyAttribute;
 		
-		private string _WhoAttribute;
+		private System.Guid _WhoAttribute;
 		
-		private string _whereAttribute;
+		private string _WhereAttribute;
 		
 		private string _WhomAttribute;
 		
@@ -2243,6 +2249,8 @@ namespace WebApplication1
 		private string _HowMuchAttribute;
 		
 		private string _HowManyAttribute;
+		
+		private string _GroupNames;
 		
 		private bool _IsLogicalDelete;
 		
@@ -2258,7 +2266,7 @@ namespace WebApplication1
 		
 		private System.Nullable<System.DateTime> _DeleteDate;
 		
-		private EntityRef<RelationsipTable> _RelationsipTable;
+		private EntityRef<UserTargetDataTable> _UserTargetDataTable;
 		
     #region 拡張メソッドの定義
     partial void OnLoaded();
@@ -2266,16 +2274,22 @@ namespace WebApplication1
     partial void OnCreated();
     partial void OnIdChanging(System.Guid value);
     partial void OnIdChanged();
+    partial void OnModeChanging(int value);
+    partial void OnModeChanged();
+    partial void OnTagsChanging(string value);
+    partial void OnTagsChanged();
+    partial void OnOccurrenceDateTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnOccurrenceDateTimeChanged();
     partial void OnWhatAttributeChanging(string value);
     partial void OnWhatAttributeChanged();
     partial void OnWhenAttributeChanging(System.Nullable<System.DateTime> value);
     partial void OnWhenAttributeChanged();
     partial void OnWhyAttributeChanging(string value);
     partial void OnWhyAttributeChanged();
-    partial void OnWhoAttributeChanging(string value);
+    partial void OnWhoAttributeChanging(System.Guid value);
     partial void OnWhoAttributeChanged();
-    partial void OnwhereAttributeChanging(string value);
-    partial void OnwhereAttributeChanged();
+    partial void OnWhereAttributeChanging(string value);
+    partial void OnWhereAttributeChanged();
     partial void OnWhomAttributeChanging(string value);
     partial void OnWhomAttributeChanged();
     partial void OnHowAttributeChanging(string value);
@@ -2284,6 +2298,8 @@ namespace WebApplication1
     partial void OnHowMuchAttributeChanged();
     partial void OnHowManyAttributeChanging(string value);
     partial void OnHowManyAttributeChanged();
+    partial void OnGroupNamesChanging(string value);
+    partial void OnGroupNamesChanged();
     partial void OnIsLogicalDeleteChanging(bool value);
     partial void OnIsLogicalDeleteChanged();
     partial void OnCreateUserChanging(System.Nullable<System.Guid> value);
@@ -2302,7 +2318,7 @@ namespace WebApplication1
 		
 		public TargetDataTable()
 		{
-			this._RelationsipTable = default(EntityRef<RelationsipTable>);
+			this._UserTargetDataTable = default(EntityRef<UserTargetDataTable>);
 			OnCreated();
 		}
 		
@@ -2317,7 +2333,7 @@ namespace WebApplication1
 			{
 				if ((this._Id != value))
 				{
-					if (this._RelationsipTable.HasLoadedOrAssignedValue)
+					if (this._UserTargetDataTable.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -2330,7 +2346,67 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhatAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Mode", DbType="Int NOT NULL")]
+		public int Mode
+		{
+			get
+			{
+				return this._Mode;
+			}
+			set
+			{
+				if ((this._Mode != value))
+				{
+					this.OnModeChanging(value);
+					this.SendPropertyChanging();
+					this._Mode = value;
+					this.SendPropertyChanged("Mode");
+					this.OnModeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tags", DbType="NVarChar(MAX)")]
+		public string Tags
+		{
+			get
+			{
+				return this._Tags;
+			}
+			set
+			{
+				if ((this._Tags != value))
+				{
+					this.OnTagsChanging(value);
+					this.SendPropertyChanging();
+					this._Tags = value;
+					this.SendPropertyChanged("Tags");
+					this.OnTagsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OccurrenceDateTime", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> OccurrenceDateTime
+		{
+			get
+			{
+				return this._OccurrenceDateTime;
+			}
+			set
+			{
+				if ((this._OccurrenceDateTime != value))
+				{
+					this.OnOccurrenceDateTimeChanging(value);
+					this.SendPropertyChanging();
+					this._OccurrenceDateTime = value;
+					this.SendPropertyChanged("OccurrenceDateTime");
+					this.OnOccurrenceDateTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhatAttribute", DbType="NVarChar(MAX)")]
 		public string WhatAttribute
 		{
 			get
@@ -2370,7 +2446,7 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhyAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhyAttribute", DbType="NVarChar(MAX)")]
 		public string WhyAttribute
 		{
 			get
@@ -2390,8 +2466,8 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhoAttribute", DbType="NVarChar(500)")]
-		public string WhoAttribute
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhoAttribute", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid WhoAttribute
 		{
 			get
 			{
@@ -2410,27 +2486,27 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_whereAttribute", DbType="NVarChar(500)")]
-		public string whereAttribute
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhereAttribute", DbType="NVarChar(MAX)")]
+		public string WhereAttribute
 		{
 			get
 			{
-				return this._whereAttribute;
+				return this._WhereAttribute;
 			}
 			set
 			{
-				if ((this._whereAttribute != value))
+				if ((this._WhereAttribute != value))
 				{
-					this.OnwhereAttributeChanging(value);
+					this.OnWhereAttributeChanging(value);
 					this.SendPropertyChanging();
-					this._whereAttribute = value;
-					this.SendPropertyChanged("whereAttribute");
-					this.OnwhereAttributeChanged();
+					this._WhereAttribute = value;
+					this.SendPropertyChanged("WhereAttribute");
+					this.OnWhereAttributeChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhomAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhomAttribute", DbType="NVarChar(MAX)")]
 		public string WhomAttribute
 		{
 			get
@@ -2450,7 +2526,7 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowAttribute", DbType="NVarChar(MAX)")]
 		public string HowAttribute
 		{
 			get
@@ -2470,7 +2546,7 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowMuchAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowMuchAttribute", DbType="NVarChar(MAX)")]
 		public string HowMuchAttribute
 		{
 			get
@@ -2490,7 +2566,7 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowManyAttribute", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HowManyAttribute", DbType="NVarChar(MAX)")]
 		public string HowManyAttribute
 		{
 			get
@@ -2506,6 +2582,26 @@ namespace WebApplication1
 					this._HowManyAttribute = value;
 					this.SendPropertyChanged("HowManyAttribute");
 					this.OnHowManyAttributeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupNames", DbType="NVarChar(MAX)")]
+		public string GroupNames
+		{
+			get
+			{
+				return this._GroupNames;
+			}
+			set
+			{
+				if ((this._GroupNames != value))
+				{
+					this.OnGroupNamesChanging(value);
+					this.SendPropertyChanging();
+					this._GroupNames = value;
+					this.SendPropertyChanged("GroupNames");
+					this.OnGroupNamesChanged();
 				}
 			}
 		}
@@ -2650,36 +2746,36 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RelationsipTable_TargetDataTable", Storage="_RelationsipTable", ThisKey="Id", OtherKey="Id", IsForeignKey=true)]
-		public RelationsipTable RelationsipTable
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserTargetDataTable_TargetDataTable", Storage="_UserTargetDataTable", ThisKey="Id", OtherKey="TargetDataId", IsForeignKey=true)]
+		public UserTargetDataTable UserTargetDataTable
 		{
 			get
 			{
-				return this._RelationsipTable.Entity;
+				return this._UserTargetDataTable.Entity;
 			}
 			set
 			{
-				RelationsipTable previousValue = this._RelationsipTable.Entity;
+				UserTargetDataTable previousValue = this._UserTargetDataTable.Entity;
 				if (((previousValue != value) 
-							|| (this._RelationsipTable.HasLoadedOrAssignedValue == false)))
+							|| (this._UserTargetDataTable.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._RelationsipTable.Entity = null;
+						this._UserTargetDataTable.Entity = null;
 						previousValue.TargetDataTable.Remove(this);
 					}
-					this._RelationsipTable.Entity = value;
+					this._UserTargetDataTable.Entity = value;
 					if ((value != null))
 					{
 						value.TargetDataTable.Add(this);
-						this._Id = value.Id;
+						this._Id = value.TargetDataId;
 					}
 					else
 					{
 						this._Id = default(System.Guid);
 					}
-					this.SendPropertyChanged("RelationsipTable");
+					this.SendPropertyChanged("UserTargetDataTable");
 				}
 			}
 		}
@@ -2705,25 +2801,15 @@ namespace WebApplication1
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RelationsipTable")]
-	public partial class RelationsipTable : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserTargetDataTable")]
+	public partial class UserTargetDataTable : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _Id;
+		private System.Guid _UserId;
 		
-		private int _Mode;
-		
-		private System.Nullable<System.DateTime> _OccurrenceDateTime;
-		
-		private System.Nullable<System.DateTime> _WantDateTime;
-		
-		private System.Nullable<System.DateTime> _GetDateTime;
-		
-		private System.Nullable<System.DateTime> _GiveDateTime;
-		
-		private bool _IsComplete;
+		private System.Guid _TargetDataId;
 		
 		private bool _IsLogicalDelete;
 		
@@ -2745,20 +2831,10 @@ namespace WebApplication1
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(System.Guid value);
-    partial void OnIdChanged();
-    partial void OnModeChanging(int value);
-    partial void OnModeChanged();
-    partial void OnOccurrenceDateTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnOccurrenceDateTimeChanged();
-    partial void OnWantDateTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnWantDateTimeChanged();
-    partial void OnGetDateTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnGetDateTimeChanged();
-    partial void OnGiveDateTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnGiveDateTimeChanged();
-    partial void OnIsCompleteChanging(bool value);
-    partial void OnIsCompleteChanged();
+    partial void OnUserIdChanging(System.Guid value);
+    partial void OnUserIdChanged();
+    partial void OnTargetDataIdChanging(System.Guid value);
+    partial void OnTargetDataIdChanged();
     partial void OnIsLogicalDeleteChanging(bool value);
     partial void OnIsLogicalDeleteChanged();
     partial void OnCreateUserChanging(System.Nullable<System.Guid> value);
@@ -2775,148 +2851,48 @@ namespace WebApplication1
     partial void OnDeleteDateChanged();
     #endregion
 		
-		public RelationsipTable()
+		public UserTargetDataTable()
 		{
 			this._TargetDataTable = new EntitySet<TargetDataTable>(new Action<TargetDataTable>(this.attach_TargetDataTable), new Action<TargetDataTable>(this.detach_TargetDataTable));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid UserId
 		{
 			get
 			{
-				return this._Id;
+				return this._UserId;
 			}
 			set
 			{
-				if ((this._Id != value))
+				if ((this._UserId != value))
 				{
-					this.OnIdChanging(value);
+					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Mode", DbType="Int NOT NULL")]
-		public int Mode
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetDataId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid TargetDataId
 		{
 			get
 			{
-				return this._Mode;
+				return this._TargetDataId;
 			}
 			set
 			{
-				if ((this._Mode != value))
+				if ((this._TargetDataId != value))
 				{
-					this.OnModeChanging(value);
+					this.OnTargetDataIdChanging(value);
 					this.SendPropertyChanging();
-					this._Mode = value;
-					this.SendPropertyChanged("Mode");
-					this.OnModeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OccurrenceDateTime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> OccurrenceDateTime
-		{
-			get
-			{
-				return this._OccurrenceDateTime;
-			}
-			set
-			{
-				if ((this._OccurrenceDateTime != value))
-				{
-					this.OnOccurrenceDateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._OccurrenceDateTime = value;
-					this.SendPropertyChanged("OccurrenceDateTime");
-					this.OnOccurrenceDateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WantDateTime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> WantDateTime
-		{
-			get
-			{
-				return this._WantDateTime;
-			}
-			set
-			{
-				if ((this._WantDateTime != value))
-				{
-					this.OnWantDateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._WantDateTime = value;
-					this.SendPropertyChanged("WantDateTime");
-					this.OnWantDateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GetDateTime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> GetDateTime
-		{
-			get
-			{
-				return this._GetDateTime;
-			}
-			set
-			{
-				if ((this._GetDateTime != value))
-				{
-					this.OnGetDateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._GetDateTime = value;
-					this.SendPropertyChanged("GetDateTime");
-					this.OnGetDateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GiveDateTime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> GiveDateTime
-		{
-			get
-			{
-				return this._GiveDateTime;
-			}
-			set
-			{
-				if ((this._GiveDateTime != value))
-				{
-					this.OnGiveDateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._GiveDateTime = value;
-					this.SendPropertyChanged("GiveDateTime");
-					this.OnGiveDateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsComplete", DbType="Bit NOT NULL")]
-		public bool IsComplete
-		{
-			get
-			{
-				return this._IsComplete;
-			}
-			set
-			{
-				if ((this._IsComplete != value))
-				{
-					this.OnIsCompleteChanging(value);
-					this.SendPropertyChanging();
-					this._IsComplete = value;
-					this.SendPropertyChanged("IsComplete");
-					this.OnIsCompleteChanged();
+					this._TargetDataId = value;
+					this.SendPropertyChanged("TargetDataId");
+					this.OnTargetDataIdChanged();
 				}
 			}
 		}
@@ -3061,7 +3037,7 @@ namespace WebApplication1
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RelationsipTable_TargetDataTable", Storage="_TargetDataTable", ThisKey="Id", OtherKey="Id")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserTargetDataTable_TargetDataTable", Storage="_TargetDataTable", ThisKey="TargetDataId", OtherKey="Id")]
 		public EntitySet<TargetDataTable> TargetDataTable
 		{
 			get
@@ -3097,13 +3073,13 @@ namespace WebApplication1
 		private void attach_TargetDataTable(TargetDataTable entity)
 		{
 			this.SendPropertyChanging();
-			entity.RelationsipTable = this;
+			entity.UserTargetDataTable = this;
 		}
 		
 		private void detach_TargetDataTable(TargetDataTable entity)
 		{
 			this.SendPropertyChanging();
-			entity.RelationsipTable = null;
+			entity.UserTargetDataTable = null;
 		}
 	}
 }
