@@ -721,6 +721,24 @@ namespace WebApplication1
         #endregion
 
         #region 情報変更
+        /// <summary>
+        /// 情報変更
+        /// </summary>
+        /// <param name="userId">ユーザーID</param>
+        /// <param name="mode">モード</param>
+        /// <param name="tags">タグ</param>
+        /// <param name="groupName">グループ名</param>
+        /// <param name="targetDataID">ターゲットデータID</param>
+        /// <param name="whatAttribute">whatの内容</param>
+        /// <param name="whenAttribute">whenの内容</param>
+        /// <param name="whyAttribute">whyの内容</param>
+        /// <param name="whoAttribute">whoの内容</param>
+        /// <param name="whereAttribute">whereの内容</param>
+        /// <param name="whomAttribute">whomの内容</param>
+        /// <param name="howAttribute">howの内容</param>
+        /// <param name="howMuchAttribute">how muchの内容</param>
+        /// <param name="howManyAttribute">how manyの内容</param>
+        /// <returns></returns>
         private bool modifyTargetData(string userId, int mode, string tags, string groupName, string targetDataID
                                                   , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
                                                   , string whereAttribute, string whomAttribute, string howAttribute
