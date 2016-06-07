@@ -37,7 +37,8 @@ namespace WebApplication1
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public void HelloWorld()
         {
-            test[] test = new test[]{ new test() { name = "HelloWord1" }, new test() { name = "HelloWord2" } };
+            //test[] test = new test[]{ new test() { name = "HelloWord1" }, new test() { name = "HelloWord2" } };
+            test[] test = new test[] { new test() { name = "HelloWord1" }};
             JavaScriptSerializer js = new JavaScriptSerializer();
             Context.Response.Clear();
             Context.Response.ContentType = "application/json";
