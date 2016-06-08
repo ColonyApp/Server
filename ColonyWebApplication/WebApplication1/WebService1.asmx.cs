@@ -37,8 +37,8 @@ namespace WebApplication1
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public void HelloWorld()
         {
-            //test[] test = new test[]{ new test() { name = "HelloWord1" }, new test() { name = "HelloWord2" } };
-            test[] test = new test[] { new test() { name = "HelloWord1" }};
+            test[] test = new test[]{ new test() { name = "HelloWord1" }, new test() { name = "HelloWord2" } };
+           // test[] test = new test[] { new test() { name = "HelloWord1" }};
             JavaScriptSerializer js = new JavaScriptSerializer();
             Context.Response.Clear();
             Context.Response.ContentType = "application/json";
@@ -647,7 +647,7 @@ namespace WebApplication1
             try
             {
                 /* バリデーション */
-                if (CanInput(userId)) { returnValue = true; }
+                if (CanInput(userId)) { returnValue = true; } else { returnValue = false; }
                 if (returnValue == true & CanInput(tags)) { returnValue = true; } else { returnValue = false; }
                 if (returnValue == true & CanInput(groupName)) { returnValue = true; } else { returnValue = false; }
                 if (returnValue == true & CanInput(whatAttribute)) { returnValue = true; } else { returnValue = false; }
