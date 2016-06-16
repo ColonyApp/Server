@@ -351,14 +351,14 @@ namespace WebApplication1
         /// <param name="newNickname">修正後のニックネーム</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void ModifyNickName(Guid userId, string oldNickname, string newNickname)
+        public void ModifyNickName(string userId, string oldNickname, string newNickname)
         {
             bool judgement = false;
             try
             {
                 /* 入力値チェック */
                 Guid p = new Guid();
-                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
+                if (!Guid.TryParse(userId, out p)) { judgement = false; }
                 if (judgement)
                 {
                     judgement = CanInput(oldNickname, 301);
@@ -376,7 +376,7 @@ namespace WebApplication1
                         {
                             var query = from ut in c.UserTables
                                         where ut.Nickname == oldNickname
-                                        where ut.Id == userId
+                                        where ut.Id == Guid.Parse(userId)
                                         where ut.IsLogicalDelete == false
                                         select ut;
 
@@ -417,14 +417,14 @@ namespace WebApplication1
         /// <param name="newMailAddress">修正後メールアドレス</param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void ModifyMailAddress(Guid userId, string oldMailAddress, string newMailAddress)
+        public void ModifyMailAddress(string userId, string oldMailAddress, string newMailAddress)
         {
             bool judgement = false;
             try
             {
                 /* 入力値チェック */
                 Guid p = new Guid();
-                if (!Guid.TryParse(userId.ToString(), out p)) { judgement = false; }
+                if (!Guid.TryParse(userId, out p)) { judgement = false; }
                 if (judgement)
                 {
                     judgement = CanInput(oldMailAddress, 301);
@@ -442,7 +442,7 @@ namespace WebApplication1
                         {
                             var query = from ut in c.UserTables
                                         where ut.Nickname == oldMailAddress
-                                        where ut.Id == userId
+                                        where ut.Id == Guid.Parse(userId)
                                         where ut.IsLogicalDelete == false
                                         select ut;
 
