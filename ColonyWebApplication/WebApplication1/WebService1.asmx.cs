@@ -833,15 +833,12 @@ namespace WebApplication1
         //検索(detail→リストから選択されたもの)
         //Want情報作成
         //Want情報更新
-        //Want情報削除
         //Want情報検索
         //Get情報作成
         //Get情報更新
-        //Get情報削除
         //Get情報検索
         //Give情報作成
         //Give情報更新
-        //Give情報削除
         //Give情報検索
 
         #region 引数チェック基本メソッド
