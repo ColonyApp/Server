@@ -6,6 +6,7 @@ using System.Web.Services;
 using System.Transactions;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
+using System.Diagnostics;
 
 namespace WebApplication1
 {
@@ -152,7 +153,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -215,7 +216,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -265,7 +266,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -328,7 +329,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -394,7 +395,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -460,7 +461,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 judgement = false;
             }
             finally
@@ -530,7 +531,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 returnValue = String.Empty;
             }
             finally
@@ -582,7 +583,7 @@ namespace WebApplication1
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Trace.WriteLine(ex.Message);
                 groupId = string.Empty;
             }
             finally
@@ -713,8 +714,9 @@ namespace WebApplication1
                     }
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Trace.WriteLine(ex.Message);
                 returnValue =  false;
             }
             return returnValue;
@@ -820,8 +822,9 @@ namespace WebApplication1
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Trace.WriteLine(ex.Message);
                 returnValue = false;
             }
             return returnValue;
