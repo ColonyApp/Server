@@ -390,6 +390,7 @@ namespace WebApplication1
                             c.SubmitChanges();
                             judgement = true;
                         }
+                        t.Complete();
                     }
                 }
             }
@@ -456,6 +457,7 @@ namespace WebApplication1
                             c.SubmitChanges();
                             judgement = true;
                         }
+                        t.Complete();
                     }
                 }
             }

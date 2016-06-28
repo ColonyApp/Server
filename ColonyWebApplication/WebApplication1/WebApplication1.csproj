@@ -119,6 +119,8 @@
     <None Include="Properties\PublishProfiles\ColonyWebAppDB - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ColonyWebService - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ColonyWebService - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyWebServices - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ColonyWebServices - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
