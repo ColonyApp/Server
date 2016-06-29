@@ -23,7 +23,7 @@ namespace WebApplication1
     /// <summary>
     /// Summary description for WebService1
     /// </summary>
-    [WebService(Namespace = "http://colonywebappdb.azurewebsites.net/")]
+    [WebService(Namespace = "http://colonywebservices.azurewebsites.net/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
@@ -199,7 +199,7 @@ namespace WebApplication1
                     using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
                         IsolationLevel = IsolationLevel.ReadUncommitted,
-                        Timeout = TransactionManager.DefaultTimeout,
+                        Timeout = TransactionManager.DefaultTimeout
                     }))
                     {
                         using (DataClasses1DataContext c = new DataClasses1DataContext())
@@ -394,9 +394,9 @@ namespace WebApplication1
                                 u.Nickname = newNickname;
                             }
                             c.SubmitChanges();
-                            judgement = true;
                         }
                         t.Complete();
+                        judgement = true;
                     }
                 }
             }
@@ -461,9 +461,9 @@ namespace WebApplication1
                                 u.MailAddress = newMailAddress;
                             }
                             c.SubmitChanges();
-                            judgement = true;
                         }
                         t.Complete();
+                        judgement = true;
                     }
                 }
             }
@@ -694,6 +694,7 @@ namespace WebApplication1
                         Id = targetDataId,
                         Mode = mode,
                         Tags = tags,
+                        OccurrenceDateTime = nowDateTime,
                         WhatAttribute = whatAttribute,
                         WhenAttribute = DatetimeWhenAttribute,
                         WhyAttribute = whyAttribute,
@@ -839,9 +840,6 @@ namespace WebApplication1
         }
         #endregion
 
-        //検索(summary→リスト)
-        //検索(detail→リストから選択されたもの)
-
         #region Want情報作成
         /// <summary>
         /// Want情報作成
@@ -858,10 +856,12 @@ namespace WebApplication1
         /// <param name="howAttribute"></param>
         /// <param name="howMuchAttribute"></param>
         /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
         public void CreateDataWant(string userId, string tags, string groupName
-                                               , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
-                                               , string whereAttribute, string whomAttribute, string howAttribute
-                                               , string howMuchAttribute, string howManyAttribute)
+                                                    , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                    , string whereAttribute, string whomAttribute, string howAttribute
+                                                    , string howMuchAttribute, string howManyAttribute)
         {
             bool returnValue = false;
             try
@@ -886,11 +886,326 @@ namespace WebApplication1
         }
         #endregion
 
-        //Want情報更新
-        //Get情報作成
-        //Get情報更新
-        //Give情報作成
-        //Give情報更新
+        #region Want情報更新
+        /// <summary>
+        /// Want情報更新
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="targetDataID"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void ModifyDataWant(string userId, string tags, string groupName, string targetDataID
+                                                   , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                   , string whereAttribute, string whomAttribute, string howAttribute
+                                                   , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = modifyTargetData(userId, TARGET_WANT, tags, groupName, targetDataID
+                                                                  , whatAttribute, whenAttribute, whyAttribute
+                                                                  , whoAttribute, whereAttribute, whomAttribute
+                                                                  , howAttribute, howMuchAttribute, howManyAttribute);
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        #region Get情報作成
+        /// <summary>
+        /// Get情報作成
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateDataGet(string userId, string tags, string groupName
+                                                    , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                    , string whereAttribute, string whomAttribute, string howAttribute
+                                                    , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = CreateTargetData(userId, TARGET_GET, tags, groupName
+                                                            , whatAttribute, whenAttribute, whyAttribute
+                                                            , whoAttribute, whereAttribute, whomAttribute
+                                                            , howAttribute, howMuchAttribute, howManyAttribute);
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        #region Get情報更新
+        /// <summary>
+        /// Get情報更新
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="targetDataID"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void ModifyDataGet(string userId, string tags, string groupName, string targetDataID
+                                                , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                , string whereAttribute, string whomAttribute, string howAttribute
+                                                , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = modifyTargetData(userId, TARGET_GET, tags, groupName, targetDataID
+                                                                  , whatAttribute, whenAttribute, whyAttribute
+                                                                  , whoAttribute, whereAttribute, whomAttribute
+                                                                  , howAttribute, howMuchAttribute, howManyAttribute);
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        #region Give情報作成
+        /// <summary>
+        /// Give情報作成
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void CreateDataGive(string userId, string tags, string groupName
+                                                    , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                    , string whereAttribute, string whomAttribute, string howAttribute
+                                                    , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = CreateTargetData(userId, TARGET_GIVE, tags, groupName
+                                                            , whatAttribute, whenAttribute, whyAttribute
+                                                            , whoAttribute, whereAttribute, whomAttribute
+                                                            , howAttribute, howMuchAttribute, howManyAttribute);
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        #region Give情報更新
+        /// <summary>
+        /// Give情報更新
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="targetDataID"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void ModifyDataGive(string userId, string tags, string groupName, string targetDataID
+                                                  , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                                  , string whereAttribute, string whomAttribute, string howAttribute
+                                                  , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = modifyTargetData(userId, TARGET_GIVE, tags, groupName, targetDataID
+                                                                  , whatAttribute, whenAttribute, whyAttribute
+                                                                  , whoAttribute, whereAttribute, whomAttribute
+                                                                  , howAttribute, howMuchAttribute, howManyAttribute);
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        #region 検索(条件に合致した情報をリスト化)
+        /// <summary>
+        /// 検索(条件に合致した情報をリスト化)
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <param name="mailAddress"></param>
+        /// <param name="mode"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void SearchForList(string nickName, string mailAddress, int mode, string tags, string groupName
+                                              , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                              , string whereAttribute, string whomAttribute, string howAttribute
+                                              , string howMuchAttribute, string howManyAttribute)
+        {
+            string returnValue = string.Empty;            
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = string.Empty;
+            }
+            finally
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 検索(リストから選択されたものの詳細情報取得)
+        /// </summary>
+        /// <param name="targetDataId"></param>
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void SearchForDetail(string targetDataId)
+        {
+            string returnValue = string.Empty;
+            try
+            {
+                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadUncommitted,
+                    Timeout = TransactionManager.DefaultTimeout,
+                }))
+                {
+                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    {
+                        var query = from g in c.GroupTables
+                                    select g;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = string.Empty;
+            }
+            finally
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
 
         #region 引数チェック基本メソッド
         /// <summary>
