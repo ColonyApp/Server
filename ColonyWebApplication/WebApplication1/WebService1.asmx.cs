@@ -30,6 +30,12 @@ namespace WebApplication1
     [System.Web.Script.Services.ScriptService]
     public class WebService1 : System.Web.Services.WebService
     {
+        #region 定数
+        private const int TARGET_WANT = 0;
+        private const int TARGET_GET = 1;
+        private const int TARGET_GIVE = 2; 
+        #endregion  
+
         #region HelloWord
         /// <summary>
         /// HelloWord
@@ -833,18 +839,58 @@ namespace WebApplication1
         }
         #endregion
 
-        //情報削除
         //検索(summary→リスト)
         //検索(detail→リストから選択されたもの)
-        //Want情報作成
+
+        #region Want情報作成
+        /// <summary>
+        /// Want情報作成
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tags"></param>
+        /// <param name="groupName"></param>
+        /// <param name="whatAttribute"></param>
+        /// <param name="whenAttribute"></param>
+        /// <param name="whyAttribute"></param>
+        /// <param name="whoAttribute"></param>
+        /// <param name="whereAttribute"></param>
+        /// <param name="whomAttribute"></param>
+        /// <param name="howAttribute"></param>
+        /// <param name="howMuchAttribute"></param>
+        /// <param name="howManyAttribute"></param>
+        public void CreateDataWant(string userId, string tags, string groupName
+                                               , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
+                                               , string whereAttribute, string whomAttribute, string howAttribute
+                                               , string howMuchAttribute, string howManyAttribute)
+        {
+            bool returnValue = false;
+            try
+            {
+                returnValue = CreateTargetData(userId, TARGET_WANT, tags, groupName
+                                                            , whatAttribute, whenAttribute, whyAttribute
+                                                            , whoAttribute, whereAttribute, whomAttribute
+                                                            , howAttribute, howMuchAttribute, howManyAttribute);
+            }catch(Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = false;
+            }
+            finally
+            {
+                /* 最終的には judgement の値を返す */
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
+        }
+        #endregion
+
         //Want情報更新
-        //Want情報検索
         //Get情報作成
         //Get情報更新
-        //Get情報検索
         //Give情報作成
         //Give情報更新
-        //Give情報検索
 
         #region 引数チェック基本メソッド
         /// <summary>
