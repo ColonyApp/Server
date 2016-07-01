@@ -7,6 +7,7 @@ using System.Transactions;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
 using System.Diagnostics;
+using System.Text;
 
 namespace WebApplication1
 {
@@ -1149,15 +1150,25 @@ namespace WebApplication1
                                               , string whereAttribute, string whomAttribute, string howAttribute
                                               , string howMuchAttribute, string howManyAttribute)
         {
-            string returnValue = string.Empty;            
+            Dictionary<string, string> returnValue = new Dictionary<string, string>();            
             try
             {
-
+                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadUncommitted,
+                    Timeout = TransactionManager.DefaultTimeout,
+                }))
+                {
+                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    {
+                        //var list = from t in c.TargetDataTable
+                                     
+                    }
+                }
             }
             catch (Exception ex)
             {
                 Trace.Write(ex.Message);
-                returnValue = string.Empty;
             }
             finally
             {
@@ -1172,26 +1183,72 @@ namespace WebApplication1
         /// <summary>
         /// 検索(リストから選択されたものの詳細情報取得)
         /// </summary>
-        /// <param name="targetDataId"></param>
+        /// <param name="rawTargetDataId"></param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void SearchForDetail(string targetDataId)
+        public void SearchForDetail(string rawTargetDataId)
         {
             string returnValue = string.Empty;
             try
             {
-                using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                Guid test;
+                Guid targetDataId = Guid.NewGuid();
+                if (Guid.TryParse(rawTargetDataId, out test))
                 {
-                    IsolationLevel = IsolationLevel.ReadUncommitted,
-                    Timeout = TransactionManager.DefaultTimeout,
-                }))
-                {
-                    using (DataClasses1DataContext c = new DataClasses1DataContext())
+                    targetDataId = Guid.Parse(rawTargetDataId);
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                     {
-                        var query = from g in c.GroupTables
-                                    select g;
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            var detailData = from u in c.UserTables
+                                        join utdt in c.UserTargetDataTable on u.Id equals utdt.UserId
+                                        join t in c.TargetDataTable on utdt.TargetDataId equals t.Id
+                                        join ug in c.UserGroupTables on u.Id equals ug.UserId
+                                        join g in c.GroupTables on ug.GroupId01 equals g.GroupId
+                                        where utdt.TargetDataId == targetDataId
+                                        where u.IsLogicalDelete == false
+                                        where utdt.IsLogicalDelete == false
+                                        where t.IsLogicalDelete == false
+                                        where ug.IsLogicalDelete == false
+                                        where g.IsLogicalDelete == false
+                                        select new { name = u.Nickname, mailAddress = u.MailAddress, groupName = g.GroupName
+                                                         , mode = t.Mode, tags = t.Tags, OccurrenceDateTime = t.OccurrenceDateTime
+                                                         , whatAttr = t.WhatAttribute, whenAttr = t.WhenAttribute, whereAttr = t.WhereAttribute
+                                                         , whyAttr = t.WhyAttribute, whoAttr= t.WhoAttribute, whomAttr = t.WhomAttribute
+                                                         , howAttr = t.HowAttribute, howMuchAttr= t.HowMuchAttribute, howManyAttr = t.HowManyAttribute};
+                            if (detailData.Count() != 1)
+                            {
+                                returnValue = string.Empty;
+                            }else
+                            {
+                                var sb = new StringBuilder();
+                                foreach (var d in detailData)
+                                {
+                                    sb.Append("Name=[").Append(d.name).Append("]").Append(", ");
+                                    sb.Append("MailAddress=[").Append(d.mailAddress).Append("]").Append(", ");
+                                    sb.Append("GroupName=[").Append(d.groupName).Append("]").Append(", ");
+                                    sb.Append("Mode=[").Append(d.mode).Append("]").Append(", ");
+                                    sb.Append("Tags=[").Append(d.tags).Append("]").Append(", ");
+                                    sb.Append("OccurrenceDataTime=[").Append(d.OccurrenceDateTime).Append("]").Append(", ");
+                                    sb.Append("What=[").Append(d.whatAttr).Append("]").Append(", ");
+                                    sb.Append("When=[").Append(d.whenAttr).Append("]").Append(", ");
+                                    sb.Append("Where=[").Append(d.whereAttr).Append("]").Append(", ");
+                                    sb.Append("Why=[").Append(d.whyAttr).Append("]").Append(", ");
+                                    sb.Append("Who=[").Append(d.whoAttr).Append("]").Append(", ");
+                                    sb.Append("Whom=[").Append(d.whomAttr).Append("]").Append(", ");
+                                    sb.Append("How=[").Append(d.howAttr).Append("]").Append(", ");
+                                    sb.Append("HowMuch=[").Append(d.howMuchAttr).Append("]").Append(", ");
+                                    sb.Append("HowMany=[").Append(d.howManyAttr).Append("]");
+                                }
+                                returnValue = sb.ToString();
+                            }
+                        }
                     }
-                }
+                }else { returnValue = string.Empty; }
             }
             catch (Exception ex)
             {
