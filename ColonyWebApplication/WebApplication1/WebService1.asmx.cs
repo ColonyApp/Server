@@ -60,29 +60,110 @@ namespace WebApplication1
         /// </summary>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void CreateUserId()
+        public void CreateUserIdByNickName(string nickName)
         {
-            Guid userId = Guid.NewGuid();
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Context.Response.Clear();
-            Context.Response.ContentType = "application/json";
-            Context.Response.Write(js.Serialize(userId));
+            string returnValue = string.Empty;
+            try
+            {
+                if (CanInput(nickName, 3501))
+                {
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                    {
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            var users = from u in c.UserTables
+                                         where u.Nickname == nickName
+                                         where u.IsLogicalDelete == false
+                                         select u.Id;
+                            if (users.Count() == 0 || users.Count() > 1)
+                            {
+                                returnValue = Guid.NewGuid().ToString();
+                            }
+                            else
+                            {
+                                foreach (var user in users)
+                                {
+                                    returnValue = user.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = string.Empty;
+            }
+            finally
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
         }
         #endregion
 
-        #region グループID生成
+        #region グループID取得
         /// <summary>
-        /// グループID生成
+        /// グループID取得
         /// </summary>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void CreateGroupId()
+        public void CreateGroupId(string groupName)
         {
-            Guid groupId = Guid.NewGuid();
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Context.Response.Clear();
-            Context.Response.ContentType = "application/json";
-            Context.Response.Write(js.Serialize(groupId));
+            string returnValue = string.Empty;
+            try
+            {
+                if (CanInput(groupName, 3501))
+                {
+                    using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                    {
+                        IsolationLevel = IsolationLevel.ReadUncommitted,
+                        Timeout = TransactionManager.DefaultTimeout,
+                    }))
+                    {
+                        using (DataClasses1DataContext c = new DataClasses1DataContext())
+                        {
+                            var groups = from g in c.GroupTables
+                                         join ugt in c.UserGroupTables on g.GroupId equals ugt.GroupId01
+                                         where g.GroupName == groupName
+                                         where g.IsLogicalDelete == false
+                                         where ugt.IsLogicalDelete == false
+                                         select g.GroupId;
+                            //新規の場合はGUIDをここで生成。既存のものがあればそれを返す
+                            if (groups.Count() == 0 || groups.Count() > 1)
+                            {
+                                returnValue = Guid.NewGuid().ToString();
+                            }
+                            else
+                            {
+                                foreach(var group in groups)
+                                {
+                                    returnValue = group.ToString();
+                                }
+                            }             
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.Write(ex.Message);
+                returnValue = string.Empty;
+            }
+            finally
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(js.Serialize(returnValue));
+            }
         }
         #endregion
 
@@ -1150,7 +1231,7 @@ namespace WebApplication1
                                               , string whereAttribute, string whomAttribute, string howAttribute
                                               , string howMuchAttribute, string howManyAttribute)
         {
-            Dictionary<string, string> returnValue = new Dictionary<string, string>();            
+            var returnValue = new Dictionary<int, string>();            
             try
             {
                 using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
@@ -1161,8 +1242,67 @@ namespace WebApplication1
                 {
                     using (DataClasses1DataContext c = new DataClasses1DataContext())
                     {
-                        //var list = from t in c.TargetDataTable
-                                     
+                        var list = from u in c.UserTables
+                                   join utdt in c.UserTargetDataTable on u.Id equals utdt.UserId
+                                   join tdt in c.TargetDataTable on utdt.TargetDataId equals tdt.Id
+                                   join ugt in c.UserGroupTables on u.Id equals ugt.UserId
+                                   join g in c.GroupTables on ugt.GroupId01 equals g.GroupId
+                                   where u.IsLogicalDelete == false
+                                   where utdt.IsLogicalDelete == false
+                                   where tdt.IsLogicalDelete == false
+                                   where ugt.IsLogicalDelete == false
+                                   where g.IsLogicalDelete == false
+                                   where u.Nickname.Contains(nickName)
+                                   where u.MailAddress.Contains(mailAddress)
+                                   where tdt.Mode == mode
+                                   where tdt.Tags.Contains(tags)
+                                   where tdt.WhatAttribute.Contains(whatAttribute)
+                                   where tdt.WhenAttribute <= DateTime.Parse(whenAttribute)
+                                   where tdt.WhyAttribute.Contains(whyAttribute)
+                                   where tdt.WhoAttribute == u.Id
+                                   where tdt.WhomAttribute.Contains(whomAttribute)
+                                   where tdt.HowAttribute.Contains(howAttribute)
+                                   where tdt.HowManyAttribute.Contains(howManyAttribute)
+                                   where tdt.HowMuchAttribute.Contains(howMuchAttribute)
+                                   select new
+                                   {
+                                       name = u.Nickname,
+                                       mailAddress = u.MailAddress,
+                                       groupName = g.GroupName,
+                                       mode = tdt.Mode,
+                                       tags = tdt.Tags,
+                                       OccurrenceDateTime = tdt.OccurrenceDateTime,
+                                       whatAttr = tdt.WhatAttribute,
+                                       whenAttr = tdt.WhenAttribute,
+                                       whereAttr = tdt.WhereAttribute,
+                                       whyAttr = tdt.WhyAttribute,
+                                       whoAttr = tdt.WhoAttribute,
+                                       whomAttr = tdt.WhomAttribute,
+                                       howAttr = tdt.HowAttribute,
+                                       howMuchAttr = tdt.HowMuchAttribute,
+                                       howManyAttr = tdt.HowManyAttribute
+                                   };
+                        int i = 0;
+                        foreach (var content in list)
+                        {
+                            var sb = new StringBuilder();
+                            sb.Append(content.name).Append(", ");                       
+                            sb.Append(content.mailAddress).Append(", ");
+                            sb.Append(content.groupName).Append(", ");
+                            sb.Append(content.mode).Append(", ");
+                            sb.Append(content.tags).Append(", ");
+                            sb.Append(content.OccurrenceDateTime).Append(", ");
+                            sb.Append(content.whatAttr).Append(", ");
+                            sb.Append(content.whenAttr).Append(", ");
+                            sb.Append(content.whereAttr).Append(", ");
+                            sb.Append(content.whyAttr).Append(", ");
+                            sb.Append(content.whoAttr).Append(", ");
+                            sb.Append(content.whomAttr).Append(", ");
+                            sb.Append(content.howAttr).Append(", ");
+                            sb.Append(content.howMuchAttr).Append(", ");
+                            sb.Append(content.howManyAttr).Append(", ");
+                            returnValue.Add(i, sb.ToString());
+                        }
                     }
                 }
             }
@@ -1180,6 +1320,7 @@ namespace WebApplication1
         }
         #endregion
 
+        #region 検索(リストから選択されたものの詳細情報取得)
         /// <summary>
         /// 検索(リストから選択されたものの詳細情報取得)
         /// </summary>
@@ -1228,21 +1369,21 @@ namespace WebApplication1
                                 var sb = new StringBuilder();
                                 foreach (var d in detailData)
                                 {
-                                    sb.Append("Name=[").Append(d.name).Append("]").Append(", ");
-                                    sb.Append("MailAddress=[").Append(d.mailAddress).Append("]").Append(", ");
-                                    sb.Append("GroupName=[").Append(d.groupName).Append("]").Append(", ");
-                                    sb.Append("Mode=[").Append(d.mode).Append("]").Append(", ");
-                                    sb.Append("Tags=[").Append(d.tags).Append("]").Append(", ");
-                                    sb.Append("OccurrenceDataTime=[").Append(d.OccurrenceDateTime).Append("]").Append(", ");
-                                    sb.Append("What=[").Append(d.whatAttr).Append("]").Append(", ");
-                                    sb.Append("When=[").Append(d.whenAttr).Append("]").Append(", ");
-                                    sb.Append("Where=[").Append(d.whereAttr).Append("]").Append(", ");
-                                    sb.Append("Why=[").Append(d.whyAttr).Append("]").Append(", ");
-                                    sb.Append("Who=[").Append(d.whoAttr).Append("]").Append(", ");
-                                    sb.Append("Whom=[").Append(d.whomAttr).Append("]").Append(", ");
-                                    sb.Append("How=[").Append(d.howAttr).Append("]").Append(", ");
-                                    sb.Append("HowMuch=[").Append(d.howMuchAttr).Append("]").Append(", ");
-                                    sb.Append("HowMany=[").Append(d.howManyAttr).Append("]");
+                                    sb.Append("Name:").Append(d.name).Append("").Append(", ");
+                                    sb.Append("MailAddress:").Append(d.mailAddress).Append("").Append(", ");
+                                    sb.Append("GroupName:").Append(d.groupName).Append("").Append(", ");
+                                    sb.Append("Mode:").Append(d.mode).Append("").Append(", ");
+                                    sb.Append("Tags:").Append(d.tags).Append("").Append(", ");
+                                    sb.Append("OccurrenceDataTime:").Append(d.OccurrenceDateTime).Append("").Append(", ");
+                                    sb.Append("What:").Append(d.whatAttr).Append("").Append(", ");
+                                    sb.Append("When:").Append(d.whenAttr).Append("").Append(", ");
+                                    sb.Append("Where:").Append(d.whereAttr).Append("").Append(", ");
+                                    sb.Append("Why:").Append(d.whyAttr).Append("").Append(", ");
+                                    sb.Append("Who:").Append(d.whoAttr).Append("").Append(", ");
+                                    sb.Append("Whom:").Append(d.whomAttr).Append("").Append(", ");
+                                    sb.Append("How:").Append(d.howAttr).Append("").Append(", ");
+                                    sb.Append("HowMuch:").Append(d.howMuchAttr).Append("").Append(", ");
+                                    sb.Append("HowMany:").Append(d.howManyAttr).Append("");
                                 }
                                 returnValue = sb.ToString();
                             }
@@ -1263,6 +1404,7 @@ namespace WebApplication1
                 Context.Response.Write(js.Serialize(returnValue));
             }
         }
+        #endregion
 
         #region 引数チェック基本メソッド
         /// <summary>
