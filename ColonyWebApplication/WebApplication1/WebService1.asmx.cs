@@ -1210,26 +1210,10 @@ namespace WebApplication1
         /// <summary>
         /// 検索(条件に合致した情報をリスト化)
         /// </summary>
-        /// <param name="nickName"></param>
-        /// <param name="mailAddress"></param>
-        /// <param name="mode"></param>
-        /// <param name="tags"></param>
-        /// <param name="groupName"></param>
-        /// <param name="whatAttribute"></param>
-        /// <param name="whenAttribute"></param>
-        /// <param name="whyAttribute"></param>
-        /// <param name="whoAttribute"></param>
-        /// <param name="whereAttribute"></param>
-        /// <param name="whomAttribute"></param>
-        /// <param name="howAttribute"></param>
-        /// <param name="howMuchAttribute"></param>
-        /// <param name="howManyAttribute"></param>
+        /// <param name="searchTargetData"></param>
         [WebMethod]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void SearchForList(string nickName, string mailAddress, int mode, string tags, string groupName
-                                              , string whatAttribute, string whenAttribute, string whyAttribute, string whoAttribute
-                                              , string whereAttribute, string whomAttribute, string howAttribute
-                                              , string howMuchAttribute, string howManyAttribute)
+        public void SearchForList(string searchTargetData)
         {
             var returnValue = new Dictionary<int, string>();            
             try
@@ -1252,18 +1236,17 @@ namespace WebApplication1
                                    where tdt.IsLogicalDelete == false
                                    where ugt.IsLogicalDelete == false
                                    where g.IsLogicalDelete == false
-                                   where u.Nickname.Contains(nickName)
-                                   where u.MailAddress.Contains(mailAddress)
-                                   where tdt.Mode == mode
-                                   where tdt.Tags.Contains(tags)
-                                   where tdt.WhatAttribute.Contains(whatAttribute)
-                                   where tdt.WhenAttribute <= DateTime.Parse(whenAttribute)
-                                   where tdt.WhyAttribute.Contains(whyAttribute)
+                                   where tdt.WhenAttribute <= DateTime.Now
                                    where tdt.WhoAttribute == u.Id
-                                   where tdt.WhomAttribute.Contains(whomAttribute)
-                                   where tdt.HowAttribute.Contains(howAttribute)
-                                   where tdt.HowManyAttribute.Contains(howManyAttribute)
-                                   where tdt.HowMuchAttribute.Contains(howMuchAttribute)
+                                   where u.Nickname.Contains(searchTargetData)
+                                   || u.MailAddress.Contains(searchTargetData)
+                                   || tdt.Tags.Contains(searchTargetData)
+                                   || tdt.WhatAttribute.Contains(searchTargetData)
+                                   || tdt.WhyAttribute.Contains(searchTargetData)
+                                   || tdt.WhomAttribute.Contains(searchTargetData)
+                                   || tdt.HowAttribute.Contains(searchTargetData)
+                                   || tdt.HowManyAttribute.Contains(searchTargetData)
+                                   || tdt.HowMuchAttribute.Contains(searchTargetData)
                                    select new
                                    {
                                        name = u.Nickname,
@@ -1302,6 +1285,7 @@ namespace WebApplication1
                             sb.Append(content.howMuchAttr).Append(", ");
                             sb.Append(content.howManyAttr).Append(", ");
                             returnValue.Add(i, sb.ToString());
+                            i++;
                         }
                     }
                 }
