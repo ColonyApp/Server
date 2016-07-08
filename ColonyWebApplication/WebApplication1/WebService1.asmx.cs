@@ -1237,7 +1237,7 @@ namespace WebApplication1
                                    where ugt.IsLogicalDelete == false
                                    where g.IsLogicalDelete == false
                                    where tdt.WhenAttribute <= DateTime.Now
-                                   where tdt.WhoAttribute == u.Id
+                                   //where tdt.WhoAttribute == u.Id
                                    where u.Nickname.Contains(searchTargetData)
                                    || u.MailAddress.Contains(searchTargetData)
                                    || tdt.Tags.Contains(searchTargetData)
